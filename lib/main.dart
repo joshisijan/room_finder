@@ -1,11 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:room_finder/pages/login.dart';
 
 import 'package:room_finder/pages/settings.dart';
 import 'package:room_finder/pages/home.dart';
+import 'package:room_finder/theme/theme.dart';
 import 'package:room_finder/theme/theme.model.dart';
 
-void main() => runApp(MyApp());
+void main(){
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -18,10 +28,29 @@ class MyApp extends StatelessWidget {
             title: 'Main App',
             debugShowCheckedModeBanner: false,
             theme: myTheme.theme,
-            initialRoute: '/',
+            darkTheme: darkTheme,
+            home: StreamBuilder(
+              stream: FirebaseAuth.instance.onAuthStateChanged,
+              builder: (context, snapshot){
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return Scaffold(
+                    body: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }else{
+                  if(snapshot.hasData){
+                    return HomePage();
+                  }else{
+                    return LoginPage();
+                  }
+                }
+              },
+            ),
             routes: {
-              '/' : (context) => HomePage(),
+              '/home' : (context) => HomePage(),
               '/setting' : (context) => SettingPage(),
+              '/login' : (context) => LoginPage(),
             },
           );
         },
@@ -29,3 +58,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+
+
