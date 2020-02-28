@@ -10,7 +10,7 @@ class SearchTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       key: PageStorageKey('search'),
-      child: Text(this.cUser.toString()),
+      child: Text(this.cUser.photoUrl.toString()),
     );
   }
 }

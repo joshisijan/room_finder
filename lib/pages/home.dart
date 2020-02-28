@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:room_finder/functions/constants.dart';
 import 'package:room_finder/pages/login.dart';
 import 'package:room_finder/tabs/account_tab.dart';
 import 'package:room_finder/tabs/home_tab.dart';
@@ -28,6 +29,17 @@ class _HomePageState extends State<HomePage> {
             return Scaffold(
               appBar: AppBar(
                 title: Text('Room Finder'),
+                actions: <Widget>[
+                  _currentIndex == 0 || _currentIndex == 1 ? IconButton(
+                    icon: Icon(Icons.map),
+                    onPressed: (){
+
+                    },
+                  ) : SizedBox(),
+                  SizedBox(
+                    width: kDefaultPadding / 2,
+                  ),
+                ],
               ),
               body: FutureBuilder(
                   future: _fbAuth.currentUser(),

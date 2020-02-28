@@ -10,10 +10,6 @@ import 'package:room_finder/theme/theme.dart';
 import 'package:room_finder/theme/theme.model.dart';
 
 void main(){
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
   runApp(MyApp());
 }
 

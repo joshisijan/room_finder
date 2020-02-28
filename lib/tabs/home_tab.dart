@@ -11,7 +11,13 @@ class HomeTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       key: PageStorageKey('home'),
-      child: Text(this.cUser.phoneNumber.toString()),
+      child: ListView(
+        children: <Widget>[
+          ListTile(
+            title: Text(this.cUser.displayName),
+          ),
+        ],
+      ),
     );
   }
 }

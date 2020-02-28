@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:room_finder/custom_pluging/custom_button.dart';
 import 'package:room_finder/custom_pluging/custom_error.dart';
@@ -7,7 +8,6 @@ import 'package:room_finder/custom_pluging/custom_form_field.dart';
 import 'package:room_finder/functions/constants.dart';
 import 'package:room_finder/pages/login.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path/path.dart' as Path;
 
 
@@ -24,8 +24,8 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
 
   final FirebaseAuth _fbAuth = FirebaseAuth.instance;
-
-  final Firestore _fstore = Firestore.instance;
+  
+  final FirebaseStorage _fStorage = FirebaseStorage.instance;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -41,17 +41,19 @@ class _EditProfileState extends State<EditProfile> {
 
   File _image;
 
-  String _uploadFileUrl;
-  
   String _imgUrl = '';
+
+  String _name = '';
+
+  bool _imageSelected = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _imgUrl = this.widget.cUser.photoUrl ?? 'https://picsum.photos/seed/picsum/300/300';
+    _imgUrl = this.widget.cUser.photoUrl ?? '';
     _nameController = TextEditingController();
-    _nameController.text = this.widget.cUser.displayName;
+    _nameController.text = this.widget.cUser.displayName ?? '';
   }
 
   @override
@@ -98,7 +100,7 @@ class _EditProfileState extends State<EditProfile> {
                           CircleAvatar(
                             backgroundColor: Theme.of(context).accentColor,
                             radius: kDefaultPadding * 2,
-                            backgroundImage: NetworkImage(_imgUrl),
+                            backgroundImage: _imageSelected ? FileImage(_image) : NetworkImage(_imgUrl ?? ''),
                           ),
                         ],
                       ),
@@ -173,24 +175,48 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future chooseImage()async{
+    _name = _nameController.text.trim();
+    FocusScope.of(context).unfocus();
     await ImagePicker.pickImage(source: ImageSource.gallery).then((image){
       setState(() {
-        _image = image;
-        _imgUrl = _image.path;
+        if(image != null){
+          _image = image;
+          _imageSelected = true;
+          _nameController.text = _name.trim();
+        }
       });
     });
   }
 
   void submitted() async {
     if(_formKey.currentState.validate()){
+      FocusScope.of(context).unfocus();
       setState(() {
         submittedPressed = true;
       });
-      if(_image != null){
-        final DocumentReference docRef = _fstore.document('profile_image/${Path.basename(_image.path)}');
-      }
       UserUpdateInfo info = UserUpdateInfo();
       info.displayName = _nameController.text.toString().trim().toLowerCase();
+      if(_image != null){
+        if(this.widget.cUser.photoUrl != null){
+          StorageReference stoRefDel = await _fStorage.getReferenceFromUrl(this.widget.cUser.photoUrl);
+          stoRefDel.delete().then((value){ }).catchError((error){
+
+          });
+        }
+        StorageReference stoRef = _fStorage.ref().child('profile_image/${Path.basename(_image.path)}');
+        StorageUploadTask uTask = stoRef.putFile(_image);
+        await uTask.onComplete;
+        await stoRef.getDownloadURL().then((fileUrl){
+          setState(() {
+            _imgUrl = fileUrl;
+          });
+          info.photoUrl = fileUrl;
+        }).catchError((error){
+          _hasError = true;
+          _error = error.message.toString();
+          submittedPressed = false;
+        });
+      }
       this.widget.cUser.updateProfile(info).then((value){
         Navigator.of(context).pop();
       }).catchError((error){
