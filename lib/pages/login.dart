@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:room_finder/custom_pluging/custom_button.dart';
 import 'package:room_finder/custom_pluging/custom_error.dart';
 import 'package:room_finder/custom_pluging/custom_form_field.dart';
+import 'package:room_finder/functions/constants.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -32,6 +33,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final _formKey = GlobalKey<FormState>();
 
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -51,6 +54,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('SpareRoom'),
+      ),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -71,6 +77,73 @@ class _LoginPageState extends State<LoginPage> {
                       key: _formKey,
                       child: ListView(
                         children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.all(kDefaultPadding),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Text(
+                                  'Hello people,',
+                                  style: Theme.of(context).textTheme.caption,
+                                ),
+                                SizedBox(
+                                  height: kDefaultPadding / 2,
+                                ),
+                                Text(
+                                  'Welcome to SpareRoom!',
+                                  style: Theme.of(context).textTheme.subtitle,
+                                ),
+                                SizedBox(
+                                  height: kDefaultPadding / 4,
+                                ),
+                                Text(
+                                  'SpareRoom helps you to get a prefect room partner or just a perfect room.',
+                                  style: Theme.of(context).textTheme.caption,
+                                ),
+                                CustomButton(
+                                  padded: false,
+                                  bgColor: Theme.of(context).accentColor,
+                                  title: Text('Search rooms'),
+                                  pressed: (){
+
+                                  },
+                                ),
+                                CustomButton(
+                                  padded: false,
+                                  title: Text('Search flatmates'),
+                                  pressed: (){
+
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(kDefaultPadding),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Join us',
+                                  style: Theme.of(context).textTheme.caption,
+                                ),
+                                SizedBox(
+                                  height: kDefaultPadding / 2,
+                                ),
+                                Text(
+                                  'START YOUR ADVENTURE WITH US',
+                                  style: Theme.of(context).textTheme.subtitle,
+                                ),
+                                SizedBox(
+                                  height: kDefaultPadding / 4,
+                                ),
+                                Text(
+                                  'No need to register in tradational way just put in your phone number and you are good to go. Unlock some more features by just signing in.',
+                                  style: Theme.of(context).textTheme.caption,
+                                ),
+                              ],
+                            ),
+                          ),
                           CustomFormField(
                             title: _sent ? 'Verification code:' : 'Phone number:',
                             hint: _sent ? 'verification code' : 'phone number',
@@ -91,13 +164,15 @@ class _LoginPageState extends State<LoginPage> {
                             pass: false,
                           ),
                           CustomButton(
-                            title: _sent ? 'Verify' : 'Log in',
+                            padded: true,
+                            title: Text(_sent ? 'VERIFY' : 'SIGN IN'),
                             pressed: () {
                               _sent ? selfVerification() : loginPressed();
                             },
                           ),
                           _sent ? CustomButton(
-                            title: 'Resend verification code',
+                            padded: true,
+                            title: Text('Resend verification code'),
                             pressed: (){
                               resendCode();
                             }

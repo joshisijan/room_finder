@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +25,10 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
 
   final FirebaseAuth _fbAuth = FirebaseAuth.instance;
-  
+
   final FirebaseStorage _fStorage = FirebaseStorage.instance;
+
+  final Firestore _fireStore = Firestore.instance;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -66,111 +69,112 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Object>(
-      stream: _fbAuth.onAuthStateChanged,
-      builder: (context, snapshot1) {
-        if(snapshot1.hasData){
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('edit profile'),
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(double.minPositive),
-                child: Opacity(
-                  opacity: submittedPressed ? 1 : 0,
-                  child: LinearProgressIndicator(),
-                ),
-              ),
-            ),
-            body: AbsorbPointer(
-              absorbing: submittedPressed,
-              child: Opacity(
-                opacity: submittedPressed ? 0.5 : 1,
-                child: Form(
-                  key: _formKey,
-                  child: ListView(
-                    children: <Widget>[
-                      _hasError ? CustomError(
-                        title: _error,
-                      ) : SizedBox(),
-                      SizedBox(
-                        height: kDefaultPadding,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: Theme.of(context).accentColor,
-                            radius: kDefaultPadding * 2,
-                            backgroundImage: _imageSelected ? FileImage(_image) : NetworkImage(_imgUrl ?? ''),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: kDefaultPadding,
-                      ),
-                      RawMaterialButton(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.edit),
-                            SizedBox(
-                              width: kDefaultPadding,
-                            ),
-                            Text('choose new image'),
-                          ],
-                        ),
-                        onPressed: chooseImage,
-                      ),
-                      SizedBox(
-                        height: kDefaultPadding,
-                      ),
-                      CustomFormField(
-                        enabled: false,
-                        title: 'Phone Number:',
-                        value: this.widget.cUser.phoneNumber,
-                        pass: false,
-                      ),
-                      SizedBox(
-                        height: kDefaultPadding,
-                      ),
-                      CustomFormField(
-                        enabled: true,
-                        title: 'Display Name:',
-                        controller: _nameController,
-                        inputType: TextInputType.text,
-                        helper: 'eg. Peter Parker',
-                        hint: 'Display Name',
-                        validator: (value){
-                          if(value.toString().isEmpty){
-                            return 'fill out this field first';
-                          }else if(!nameReg.hasMatch(value.toString().trim())){
-                            return 'Enter valid name';
-                          }
-                          return null;
-                        },
-                        submitted: (x){
-                          submitted();
-                        },
-                        pass: false,
-                      ),
-                      SizedBox(
-                        height: kDefaultPadding,
-                      ),
-                      CustomButton(
-                        title: 'Save Changes',
-                        pressed: (){
-                          submitted();
-                        },
-                      ),
-                    ],
+        stream: _fbAuth.onAuthStateChanged,
+        builder: (context, snapshot1) {
+          if(snapshot1.hasData){
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('edit profile'),
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(double.minPositive),
+                  child: Opacity(
+                    opacity: submittedPressed ? 1 : 0,
+                    child: LinearProgressIndicator(),
                   ),
                 ),
               ),
-            ),
-          );
-        }else{
-          return LoginPage();
+              body: AbsorbPointer(
+                absorbing: submittedPressed,
+                child: Opacity(
+                  opacity: submittedPressed ? 0.5 : 1,
+                  child: Form(
+                    key: _formKey,
+                    child: ListView(
+                      children: <Widget>[
+                        _hasError ? CustomError(
+                          title: _error,
+                        ) : SizedBox(),
+                        SizedBox(
+                          height: kDefaultPadding,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: Theme.of(context).accentColor,
+                              radius: kDefaultPadding * 2,
+                              backgroundImage: _imageSelected ? FileImage(_image) : NetworkImage(_imgUrl ?? ''),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: kDefaultPadding,
+                        ),
+                        RawMaterialButton(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(Icons.edit),
+                              SizedBox(
+                                width: kDefaultPadding,
+                              ),
+                              Text('choose new image'),
+                            ],
+                          ),
+                          onPressed: chooseImage,
+                        ),
+                        SizedBox(
+                          height: kDefaultPadding,
+                        ),
+                        CustomFormField(
+                          enabled: false,
+                          title: 'Phone Number:',
+                          value: this.widget.cUser.phoneNumber,
+                          pass: false,
+                        ),
+                        SizedBox(
+                          height: kDefaultPadding,
+                        ),
+                        CustomFormField(
+                          enabled: true,
+                          title: 'Display Name:',
+                          controller: _nameController,
+                          inputType: TextInputType.text,
+                          helper: 'eg. Peter Parker',
+                          hint: 'Display Name',
+                          validator: (value){
+                            if(value.toString().isEmpty){
+                              return 'fill out this field first';
+                            }else if(!nameReg.hasMatch(value.toString().trim())){
+                              return 'Enter valid name';
+                            }
+                            return null;
+                          },
+                          submitted: (x){
+                            submitted();
+                          },
+                          pass: false,
+                        ),
+                        SizedBox(
+                          height: kDefaultPadding,
+                        ),
+                        CustomButton(
+                          padded: true,
+                          title: Text('Save Changes'),
+                          pressed: (){
+                            submitted();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }else{
+            return LoginPage();
+          }
         }
-      }
     );
   }
 
@@ -191,6 +195,7 @@ class _EditProfileState extends State<EditProfile> {
   void submitted() async {
     if(_formKey.currentState.validate()){
       FocusScope.of(context).unfocus();
+      _name = _nameController.text.toString().trim();
       setState(() {
         submittedPressed = true;
       });
@@ -218,6 +223,30 @@ class _EditProfileState extends State<EditProfile> {
         });
       }
       this.widget.cUser.updateProfile(info).then((value){
+        _fireStore.collection('userDetail').where('userId',isEqualTo: this.widget.cUser.uid).getDocuments().then((snapshot){
+          if(snapshot.documents.isEmpty){
+            _fireStore.collection('userDetail').add({
+              'userId' : this.widget.cUser.uid,
+              'photoUrl': _imgUrl,
+              'displayName': _name,
+            }).then((value){
+
+            }).catchError((error){
+
+            });
+          }else{
+            snapshot.documents.forEach((doc){
+              _fireStore.collection('userDetail').document(doc.documentID).updateData({
+                'photoUrl': _imgUrl,
+                'displayName': _name,
+              }
+              ).catchError((error){
+
+              });
+            });
+          }
+        });
+
         Navigator.of(context).pop();
       }).catchError((error){
         setState(() {
@@ -226,6 +255,6 @@ class _EditProfileState extends State<EditProfile> {
           _hasError = true;
         });
       });
-     }
+    }
   }
 }

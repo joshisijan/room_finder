@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, snapshot1) {
                     if (snapshot1.connectionState == ConnectionState.waiting) {
                       return Center(
-                        child: CircularProgressIndicator(),
+                        child: Text('Loading...'),
                       );
                     } else {
                       return PageStorage(
@@ -59,9 +59,11 @@ class _HomePageState extends State<HomePage> {
                 type: BottomNavigationBarType.fixed,
                 currentIndex: _currentIndex,
                 onTap: (n) {
-                  setState(() {
-                    _currentIndex = n;
-                  });
+                  if(n != _currentIndex){
+                    setState(() {
+                      _currentIndex = n;
+                    });
+                  }
                 },
                 selectedFontSize: Theme.of(context).textTheme.caption.fontSize,
                 selectedItemColor: Theme.of(context).accentColor,
@@ -80,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.message),
-                    title: Text('Message'),
+                    title: Text('Inbox'),
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.account_circle),

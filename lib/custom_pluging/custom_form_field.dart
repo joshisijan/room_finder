@@ -15,6 +15,8 @@ class CustomFormField extends StatelessWidget {
   final String prefixText;
   final bool enabled;
   final String value;
+  final bool padded;
+  final int maxLines;
 
   CustomFormField(
       {this.focus,
@@ -23,33 +25,34 @@ class CustomFormField extends StatelessWidget {
       this.validator,
       this.inputType,
       this.submitted,
-      this.pass,
+      @required this.pass,
       this.title,
       this.hint,
       this.enabled,
       this.prefixText,
       this.helper,
-      this.value});
+      this.value,
+      this.padded = true,
+      this.maxLines});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: kDefaultPadding,
+      padding: EdgeInsets.symmetric(
+        horizontal: this.padded ? kDefaultPadding : 0.0,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: kDefaultPadding / 2),
-            child: Text(
-              this.title,
-            ),
-          ),
+          this.title != null ? Text(
+            this.title,
+          ) : SizedBox(),
           SizedBox(
             height: kDefaultPadding / 2,
           ),
           TextFormField(
+            minLines: 1,
+            maxLines: this.maxLines ?? 1,
             enabled: this.enabled,
             focusNode: this.focus,
             controller: this.controller,
@@ -59,6 +62,7 @@ class CustomFormField extends StatelessWidget {
             onFieldSubmitted: this.submitted,
             obscureText: this.pass,
             initialValue: this.value,
+            enableInteractiveSelection: true,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
               helperText: this.helper,
@@ -70,11 +74,8 @@ class CustomFormField extends StatelessWidget {
                 borderSide: BorderSide(
                   color: Theme.of(context).accentColor,
                 ),
-                borderRadius: BorderRadius.circular(kDefaultPadding),
               ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(kDefaultPadding),
-              ),
+              border: OutlineInputBorder(),
             ),
           ),
         ],
