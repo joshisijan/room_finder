@@ -7,7 +7,6 @@ class SearchTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: PageStorageKey('search'),
       child: ListView(
         children: <Widget>[
           Padding(

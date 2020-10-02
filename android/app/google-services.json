@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "1084061388607",
-    "firebase_url": "https://spareroom-a8c83.firebaseio.com",
-    "project_id": "spareroom-a8c83",
-    "storage_bucket": "spareroom-a8c83.appspot.com"
+    "project_number": "702913777721",
+    "firebase_url": "https://room-finder-92b3f.firebaseio.com",
+    "project_id": "room-finder-92b3f",
+    "storage_bucket": "room-finder-92b3f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1084061388607:android:36fd4d97be4199e0c30d8a",
+        "mobilesdk_app_id": "1:702913777721:android:104bb00463d3a321353de8",
         "android_client_info": {
           "package_name": "np.com.joshisijan.room_finder"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1084061388607-u3j0utmu5dlnnbgeid93q40haq6edkar.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "np.com.joshisijan.room_finder",
-            "certificate_hash": "0ac143cd485c03323551f9865ddf8aa329109e2a"
-          }
-        },
-        {
-          "client_id": "1084061388607-vq21789ch8b7tifntkrbr0o6sjt2mplo.apps.googleusercontent.com",
+          "client_id": "702913777721-beqjebf3kdlai1kma5r1ilhpb203p435.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA8IBVLbrCFSnEQx0Rg82699dOJcoFTnrw"
+          "current_key": "AIzaSyDV2J32WcAV7d7ugjy312njYZvOKRxJmGo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1084061388607-vq21789ch8b7tifntkrbr0o6sjt2mplo.apps.googleusercontent.com",
+              "client_id": "702913777721-beqjebf3kdlai1kma5r1ilhpb203p435.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

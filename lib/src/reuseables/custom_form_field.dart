@@ -17,6 +17,7 @@ class CustomFormField extends StatelessWidget {
   final String value;
   final bool padded;
   final int maxLines;
+  final bool autofocus;
 
   CustomFormField(
       {this.focus,
@@ -28,6 +29,7 @@ class CustomFormField extends StatelessWidget {
       @required this.pass,
       this.title,
       this.hint,
+      this.autofocus = false,
       this.enabled,
       this.prefixText,
       this.helper,
@@ -51,6 +53,7 @@ class CustomFormField extends StatelessWidget {
             height: kDefaultPadding / 2,
           ),
           TextFormField(
+            autofocus: autofocus,
             minLines: 1,
             maxLines: this.maxLines ?? 1,
             enabled: this.enabled,
@@ -76,6 +79,11 @@ class CustomFormField extends StatelessWidget {
                 ),
               ),
               border: OutlineInputBorder(),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
             ),
           ),
         ],

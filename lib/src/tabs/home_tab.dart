@@ -7,7 +7,6 @@ class HomeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: PageStorageKey('home'),
       child: Column(
         children: <Widget>[
           Padding(

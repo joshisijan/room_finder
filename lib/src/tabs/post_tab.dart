@@ -8,7 +8,6 @@ class PostTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: PageStorageKey('post'),
       child: ListView(
         children: <Widget>[
           Padding(
