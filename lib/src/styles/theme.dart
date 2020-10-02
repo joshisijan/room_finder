@@ -19,13 +19,6 @@ ThemeData lightTheme = ThemeData(
   buttonColor: lightPrimary,
   appBarTheme: AppBarTheme(
     elevation: 0,
-    textTheme: TextTheme(
-      title: TextStyle(
-        color: lightBG,
-        fontSize: 18.0,
-        fontWeight: FontWeight.w800,
-      ),
-    ),
   ),
 );
 
@@ -38,12 +31,5 @@ ThemeData darkTheme = ThemeData(
   cursorColor: darkAccent,
   appBarTheme: AppBarTheme(
     elevation: 0,
-    textTheme: TextTheme(
-      title: TextStyle(
-        color: lightBG,
-        fontSize: 18.0,
-        fontWeight: FontWeight.w800,
-      ),
-    ),
   ),
 );

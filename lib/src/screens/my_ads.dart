@@ -1,25 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:room_finder/custom_pluging/ad_card.dart';
 
-
-class WatchList extends StatefulWidget{
-
-  final FirebaseUser cUser;
-
-  WatchList({@required this.cUser});
-
+class MyAds extends StatefulWidget {
   @override
-  _WatchListState createState() => _WatchListState();
+  _MyAdsState createState() => _MyAdsState();
 }
 
-class _WatchListState extends State<WatchList> with SingleTickerProviderStateMixin{
-
+class _MyAdsState extends State<MyAds> with SingleTickerProviderStateMixin {
   TabController _tabController;
-
-  final Firestore _fireStore = Firestore.instance;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -39,10 +26,10 @@ class _WatchListState extends State<WatchList> with SingleTickerProviderStateMix
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Watchlist'),
+        title: Text('My Ads'),
         bottom: TabBar(
           controller: _tabController,
           tabs: <Widget>[
@@ -63,7 +50,7 @@ class _WatchListState extends State<WatchList> with SingleTickerProviderStateMix
         children: <Widget>[
           Container(),
           Container(),
-          Container()
+          Container(),
         ],
       ),
     );

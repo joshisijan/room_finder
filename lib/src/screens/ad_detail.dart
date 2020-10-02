@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:room_finder/functions/constants.dart';
+import 'package:room_finder/src/values/constants.dart';
 
 class AdDetail extends StatelessWidget {
   @override
@@ -32,6 +32,7 @@ class AdDetail extends StatelessWidget {
             automaticallyImplyLeading: false,
             flexibleSpace: FlexibleSpaceBar(
               background: CarouselSlider(
+                options: CarouselOptions(),
                 items: <Widget>[
                   Image.network('https://picsum.photos/300'),
                   Image.network('https://picsum.photos/300'),

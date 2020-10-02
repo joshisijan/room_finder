@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:room_finder/functions/constants.dart';
+import 'package:room_finder/src/values/constants.dart';
 
 class CustomFormField extends StatelessWidget {
   final FocusNode focus;

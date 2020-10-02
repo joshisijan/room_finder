@@ -1,17 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:room_finder/custom_pluging/custom_button.dart';
-import 'package:room_finder/functions/constants.dart';
+import 'package:room_finder/src/reuseables/custom_button.dart';
+import 'package:room_finder/src/values/constants.dart';
 
-class SearchTab extends StatelessWidget {
-  final FirebaseUser cUser;
 
-  SearchTab({@required this.cUser});
-
+class PostTab extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     return Container(
-      key: PageStorageKey('search'),
+      key: PageStorageKey('post'),
       child: ListView(
         children: <Widget>[
           Padding(
@@ -20,34 +17,34 @@ class SearchTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  'Hello ' + (this.cUser.displayName ?? 'unnamed') + ',',
+                  'Hello User,',
                   style: Theme.of(context).textTheme.caption,
                 ),
                 SizedBox(
                   height: kDefaultPadding / 2,
                 ),
                 Text(
-                  'Search to rooms and roommates!',
-                  style: Theme.of(context).textTheme.subtitle,
+                  'Post ads for rooms and roommates!',
+                  style: Theme.of(context).textTheme.subtitle2,
                 ),
                 SizedBox(
                   height: kDefaultPadding / 4,
                 ),
                 Text(
-                  'SpareRoom helps you to post ads for room partners and  rooms.',
+                  'SpareRoom helps you to get a prefect room partner or just a perfect room.',
                   style: Theme.of(context).textTheme.caption,
                 ),
                 CustomButton(
                   padded: false,
                   bgColor: Theme.of(context).accentColor,
-                  title: Text('Search rooms'),
+                  title: Text('Post ads for rooms'),
                   pressed: (){
 
                   },
                 ),
                 CustomButton(
                   padded: false,
-                  title: Text('Search flatmates'),
+                  title: Text('Post ads for flatmates'),
                   pressed: (){
 
                   },

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:room_finder/functions/constants.dart';
+import 'package:room_finder/src/values/constants.dart';
 
 
 class CustomButton extends StatelessWidget {
