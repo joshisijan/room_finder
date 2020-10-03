@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:room_finder/src/values/constants.dart';
 
 class CustomFormField extends StatelessWidget {
@@ -13,20 +14,26 @@ class CustomFormField extends StatelessWidget {
   final String hint;
   final String helper;
   final String prefixText;
+  final Function onEdited;
+  final int minLines;
   final bool enabled;
   final String value;
   final bool padded;
   final int maxLines;
   final bool autofocus;
-
+  final bool digitsOnly;
+  final int maxLength;
   CustomFormField(
       {this.focus,
+      this.maxLength,
       this.controller,
       this.inputAction,
+      this.minLines,
+      this.onEdited,
       this.validator,
       this.inputType,
       this.submitted,
-      @required this.pass,
+      this.pass = false,
       this.title,
       this.hint,
       this.autofocus = false,
@@ -35,6 +42,7 @@ class CustomFormField extends StatelessWidget {
       this.helper,
       this.value,
       this.padded = true,
+      this.digitsOnly = false,
       this.maxLines});
 
   @override
@@ -46,15 +54,21 @@ class CustomFormField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          this.title != null ? Text(
-            this.title,
-          ) : SizedBox(),
+          this.title != null
+              ? Text(
+                  this.title,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              : SizedBox(),
           SizedBox(
             height: kDefaultPadding / 2,
           ),
           TextFormField(
             autofocus: autofocus,
-            minLines: 1,
+            onEditingComplete: this.onEdited,
+            minLines: this.minLines ?? 1,
             maxLines: this.maxLines ?? 1,
             enabled: this.enabled,
             focusNode: this.focus,
@@ -65,9 +79,17 @@ class CustomFormField extends StatelessWidget {
             onFieldSubmitted: this.submitted,
             obscureText: this.pass,
             initialValue: this.value,
+            maxLength: maxLength != null ? maxLength : null,
             enableInteractiveSelection: true,
+            inputFormatters: digitsOnly
+                ? [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ]
+                : [],
             decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+              contentPadding: (maxLines ?? 1) > 1 || (minLines ?? 1) > 1
+                  ? EdgeInsets.all(kDefaultPadding)
+                  : EdgeInsets.symmetric(horizontal: kDefaultPadding),
               helperText: this.helper,
               hintText: this.hint,
               fillColor: Colors.transparent,

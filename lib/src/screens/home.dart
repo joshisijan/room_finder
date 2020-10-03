@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:room_finder/src/reuseables/custom_button.dart';
 import 'package:room_finder/src/reuseables/notification.dart';
 import 'package:room_finder/src/screens/edit_profile.dart';
+import 'package:room_finder/src/screens/verification.dart';
 import 'package:room_finder/src/values/constants.dart';
 import 'package:room_finder/src/tabs/account_tab.dart';
 import 'package:room_finder/src/tabs/home_tab.dart';
@@ -30,79 +31,53 @@ class _HomePageState extends State<HomePage> {
     else
       verified = false;
     if (verified == false) {
-      return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text('Verification'),
-          bottom: loading ? PreferredSize(
-            preferredSize: Size.fromHeight(4.0),
-            child: LinearProgressIndicator(minHeight: 4.0,),
-          ) : null,
-        ),
-        body: AbsorbPointer(
-          absorbing: loading,
-          child: Opacity(
-            opacity: loading ? 0.6 : 1.0,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                      'Your email address has not been verified. Verify your email address and press verify button to get access to the app.',
-                    textAlign: TextAlign.justify,
-                  ),
-                  SizedBox(
-                    height: kDefaultPadding,
-                  ),
-                  CustomButton(
-                    padded: true,
-                    title: Text('Send Verification Code'),
-                    pressed: () async {
-                      setState(() {
-                        loading = true;
-                      });
-                      try {
-                        await user.sendEmailVerification();
-                      } catch (e) {
-                        CustomNotification(
-                          color: Colors.green,
-                          title: 'Error',
-                          message: 'An error occurred.',
-                        ).show(context);
-                      }
-                      CustomNotification(
-                        color: Colors.green,
-                        title: 'Verification',
-                        message: 'Verification email sent to ${user.email}',
-                      ).show(context);
-                      setState(() {
-                        loading = false;
-                      });
-                    },
-                  ),
-                  SizedBox(
-                    height: kDefaultPadding,
-                  ),
-                  CustomButton(
-                    padded: true,
-                    title: Text('Verify'),
-                    pressed: () async {
-                      setState(() {
-                        loading = true;
-                      });
-                      await user.reload();
-                      setState(() {
-                        loading = false;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+      return VerificationPage(
+        loading: loading,
+        onSendVerification: () async {
+          setState(() {
+            loading = true;
+          });
+          try {
+            await user.sendEmailVerification();
+          } catch (e) {
+            CustomNotification(
+              color: Colors.green,
+              title: 'Error',
+              message: 'An error occurred.',
+            ).show(context);
+          }
+          CustomNotification(
+            color: Colors.green,
+            title: 'Verification',
+            message: 'Verification email sent to ${user.email}',
+          ).show(context);
+          setState(() {
+            loading = false;
+          });
+        },
+        onVerified: () async {
+          setState(() {
+            loading = true;
+          });
+          await user.reload();
+          setState(() {
+            loading = false;
+          });
+        },
+        onSignOut: () async {
+          setState(() {
+            loading = true;
+          });
+          await FirebaseAuth.instance.signOut();
+          CustomNotification(
+            color: Colors.green,
+            title: 'Sign out',
+            message: 'Successfully Signed out.',
+          ).show(context);
+          setState(() {
+            loading = false;
+          });
+        },
       );
     }else if(user.displayName == '' || user.displayName == null){
       return EditProfile(currentIndex: 0,);

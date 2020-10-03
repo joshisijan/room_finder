@@ -1,11 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:room_finder/src/reuseables/ad_card.dart';
 import 'package:room_finder/src/values/constants.dart';
 
 class HomeTab extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
+    User user = FirebaseAuth.instance.currentUser;
     return Container(
       child: Column(
         children: <Widget>[
@@ -15,7 +16,7 @@ class HomeTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  'Hello User',
+                  'Hello ${user.displayName}',
                   style: Theme.of(context).textTheme.caption,
                 ),
                 SizedBox(

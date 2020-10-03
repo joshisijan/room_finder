@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:room_finder/src/reuseables/custom_button.dart';
 import 'package:room_finder/src/values/constants.dart';
@@ -6,6 +7,7 @@ class SearchTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User user = FirebaseAuth.instance.currentUser;
     return Container(
       child: ListView(
         children: <Widget>[
@@ -15,7 +17,7 @@ class SearchTab extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Text(
-                  'Hello Usser,',
+                  'Hello ${user.displayName},',
                   style: Theme.of(context).textTheme.caption,
                 ),
                 SizedBox(

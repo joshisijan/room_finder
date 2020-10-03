@@ -4,6 +4,7 @@ import 'package:room_finder/src/screens/edit_profile.dart';
 import 'package:room_finder/src/screens/my_ads.dart';
 import 'package:room_finder/src/screens/photo_view.dart';
 import 'package:room_finder/src/screens/settings.dart';
+import 'package:room_finder/src/screens/signin.dart';
 import 'package:room_finder/src/screens/watchlist.dart';
 
 class AccountTab extends StatelessWidget {
@@ -80,8 +81,9 @@ class AccountTab extends StatelessWidget {
           ),
           ListTile(
             title: Text('log out'),
-            onTap: () {
-              FirebaseAuth.instance.signOut();
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SignInPage()));
             },
             trailing: Icon(Icons.close),
           ),
