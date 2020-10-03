@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:room_finder/src/reuseables/custom_button.dart';
+import 'package:provider/provider.dart';
+import 'package:room_finder/src/providers/home_loading_provider.dart';
 import 'package:room_finder/src/reuseables/notification.dart';
 import 'package:room_finder/src/screens/edit_profile.dart';
 import 'package:room_finder/src/screens/verification.dart';
@@ -22,10 +23,12 @@ class _HomePageState extends State<HomePage> {
   final PageStorageBucket bucket = PageStorageBucket();
   bool verified = false;
   bool loading = false;
+  bool homeLoading ;
 
   @override
   Widget build(BuildContext context) {
     User user = FirebaseAuth.instance.currentUser;
+    homeLoading = context.select((HomeLoadingProvider homeLoadingProvider) => homeLoadingProvider.getLoading);
     if (user.emailVerified == true)
       verified = true;
     else
@@ -85,64 +88,95 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        bottom: homeLoading ? PreferredSize(
+          preferredSize: Size.fromHeight(4.0),
+          child: LinearProgressIndicator(minHeight: 4.0,),
+        ) : null,
         title: Text('Room Finder'),
         actions: <Widget>[
           widget.currentIndex == 0 || widget.currentIndex == 1
-              ? IconButton(
-                  icon: Icon(Icons.map),
-                  onPressed: () {},
-                )
+              ? AbsorbPointer(
+                absorbing: homeLoading,
+                child: IconButton(
+                    icon: Icon(Icons.map, color: homeLoading ? Colors.white54 : Colors.white,),
+                    onPressed: () {},
+                  ),
+              )
               : SizedBox(),
           SizedBox(
             width: kDefaultPadding / 2,
           ),
         ],
       ),
-      body: IndexedStack(
-        index: widget.currentIndex,
-        children: [
-          HomeTab(),
-          SearchTab(),
-          PostTab(),
-          MessageTab(),
-          AccountTab(),
-        ],
+      body: AbsorbPointer(
+        absorbing: homeLoading,
+        child: Opacity(
+          opacity: homeLoading ? 0.6 : 1.0,
+          child: IndexedStack(
+            index: widget.currentIndex,
+            children: [
+              HomeTab(),
+              SearchTab(),
+              PostTab(),
+              MessageTab(),
+              AccountTab(),
+            ],
+          ),
+        ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: widget.currentIndex,
-        onTap: (n) {
-          if (n != widget.currentIndex) {
-            setState(() {
-              widget.currentIndex = n;
-            });
-          }
+      bottomNavigationBar: AbsorbPointer(
+        absorbing: homeLoading,
+        child: Opacity(
+          opacity: homeLoading ? 0.6 : 1.0,
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            currentIndex: widget.currentIndex,
+            onTap: (n) {
+              if (n != widget.currentIndex) {
+                setState(() {
+                  widget.currentIndex = n;
+                });
+              }
+            },
+            selectedFontSize: Theme.of(context).textTheme.caption.fontSize,
+            selectedItemColor: Theme.of(context).accentColor,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'Search',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.add),
+                label: 'Post Ads',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.message),
+                label: 'Messages',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle),
+                label: 'Account',
+              ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: homeLoading ? FloatingActionButton(
+        child: Icon(Icons.close),
+        backgroundColor: Theme.of(context).accentColor,
+        onPressed: (){
+          context.read<HomeLoadingProvider>().setLoading(false);
+          CustomNotification(
+            color: Colors.green,
+            message: 'Don\'t worry it will still run in background.',
+            title: 'Alert',
+          ).show(context);
         },
-        selectedFontSize: Theme.of(context).textTheme.caption.fontSize,
-        selectedItemColor: Theme.of(context).accentColor,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Post Ads',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Account',
-          ),
-        ],
-      ),
+      ): null,
     );
   }
 

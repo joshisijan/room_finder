@@ -1,9 +1,16 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:room_finder/src/providers/home_loading_provider.dart';
 import 'package:room_finder/src/reuseables/custom_button.dart';
 import 'package:room_finder/src/reuseables/custom_chip.dart';
 import 'package:room_finder/src/reuseables/custom_form_field.dart';
+import 'package:room_finder/src/reuseables/notification.dart';
 import 'package:room_finder/src/values/constants.dart';
+import 'package:provider/provider.dart';
 
 class PostTab extends StatefulWidget {
   @override
@@ -20,6 +27,7 @@ class _PostTabState extends State<PostTab> {
   FocusNode _termsFocus;
   TextEditingController _featuresController;
   FocusNode _featuresFocus;
+  ScrollController _postAdScrollController;
 
   @override
   void initState() {
@@ -32,6 +40,7 @@ class _PostTabState extends State<PostTab> {
     _termsFocus = FocusNode();
     _featuresController = TextEditingController();
     _featuresFocus = FocusNode();
+    _postAdScrollController = ScrollController();
   }
 
   @override
@@ -44,6 +53,7 @@ class _PostTabState extends State<PostTab> {
     _termsFocus.dispose();
     _featuresController.dispose();
     _featuresFocus.dispose();
+    _postAdScrollController.dispose();
     super.dispose();
   }
 
@@ -53,12 +63,19 @@ class _PostTabState extends State<PostTab> {
   bool separateKitchen = false;
   bool petsAllowed = false;
   bool water = false;
+  final FirebaseFirestore fbFirestore = FirebaseFirestore.instance;
+  final User user = FirebaseAuth.instance.currentUser;
+  File file1;
+  File file2;
+  File file3;
+  File file4;
 
   @override
   Widget build(BuildContext context) {
     User user = FirebaseAuth.instance.currentUser;
     return Container(
       child: ListView(
+        controller: _postAdScrollController,
         children: <Widget>[
           Padding(
             padding: EdgeInsets.all(kDefaultPadding),
@@ -208,9 +225,9 @@ class _PostTabState extends State<PostTab> {
                       CustomChip(
                         label: 'Water',
                         selected: water,
-                        onChange: (value){
+                        onChange: (value) {
                           setState(() {
-                            water  = value;
+                            water = value;
                           });
                         },
                       ),
@@ -263,6 +280,101 @@ class _PostTabState extends State<PostTab> {
                   SizedBox(
                     height: kDefaultPadding,
                   ),
+                  Text(
+                    'Images',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'At least one',
+                    style: Theme.of(context).textTheme.overline,
+                  ),
+                  SizedBox(
+                    height: kDefaultPadding * 0.75,
+                  ),
+                  Wrap(
+                    children: [
+                      RawMaterialButton(
+                        padding: EdgeInsets.zero,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 3 - 15.0,
+                          height: MediaQuery.of(context).size.width / 3 - 15.0,
+                          margin: EdgeInsets.symmetric(vertical: 1.0,),
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            image: file1 != null ? DecorationImage(
+                              image: FileImage(file1),
+                            ) : null,
+                          ),
+                          child: file1 == null ? Icon(Icons.add) : null,
+                        ),
+                        onPressed: ()  {
+                          selectImageAndSave(0);
+                        },
+                      ),
+                      SizedBox(width: 2.0,),
+                      RawMaterialButton(
+                        padding: EdgeInsets.zero,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 3 - 15.0,
+                          height: MediaQuery.of(context).size.width / 3 - 15.0,
+                          margin: EdgeInsets.symmetric(vertical: 1.0,),
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            image: file2 != null ? DecorationImage(
+                              image: FileImage(file2),
+                            ) : null,
+                          ),
+                          child: file2 == null ? Icon(Icons.add) : null,
+                        ),
+                        onPressed: () {
+                          selectImageAndSave(1);
+                        },
+                      ),
+                      SizedBox(width: 2.0,),
+                      RawMaterialButton(
+                        padding: EdgeInsets.zero,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 3 - 15.0,
+                          height: MediaQuery.of(context).size.width / 3 - 15.0,
+                          margin: EdgeInsets.symmetric(vertical: 1.0,),
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            image: file3 != null ? DecorationImage(
+                              image: FileImage(file3),
+                            ) : null,
+                          ),
+                          child: file3 == null ? Icon(Icons.add) : null,
+                        ),
+                        onPressed: () {
+                          selectImageAndSave(2);
+                        },
+                      ),
+                      RawMaterialButton(
+                        padding: EdgeInsets.zero,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 3 - 15.0,
+                          height: MediaQuery.of(context).size.width / 3 - 15.0,
+                          margin: EdgeInsets.symmetric(vertical: 1.0,),
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            image: file4 != null ? DecorationImage(
+                              image: FileImage(file4),
+                            ) : null,
+                          ),
+                          child: file4 == null ? Icon(Icons.add) : null,
+                        ),
+                        onPressed: () {
+                          selectImageAndSave(3);
+                        },
+                      ),
+                      SizedBox(width: 2.0,)
+                    ],
+                  ),
+                  SizedBox(
+                    height: kDefaultPadding,
+                  ),
                   CustomButton(
                     padded: false,
                     title: Text('Post Ad'),
@@ -280,9 +392,109 @@ class _PostTabState extends State<PostTab> {
     );
   }
 
+  selectImageAndSave(int n) async {
+    try{
+      PickedFile pickedFile = await ImagePicker().getImage(
+        source: ImageSource.gallery,
+      );
+      if(pickedFile != null){
+        setState(() {
+          if(n == 0){
+            file1 = File(pickedFile.path);
+          }else if(n == 1){
+            file2 = File(pickedFile.path);
+          }else if(n == 2){
+            file3 = File(pickedFile.path);
+          }else{
+            file4 = File(pickedFile.path);
+          }
+        });
+      }
+    }catch(e){
+      CustomNotification(
+        color: Colors.red,
+        message: 'An error Occurred',
+        title: 'Error',
+      ).show(context);
+    }
+  }
+
   submitAd() async {
     if (formKey.currentState.validate()) {
-      print('submitted');
+      if(file1 == null && file2 == null && file3 == null && file4 == null){
+        CustomNotification(
+          title: 'Select Image',
+          message:
+          'At least one image must be selected.',
+          color: Theme.of(context).errorColor,
+        ).show(context);
+        return;
+      }
+      context.read<HomeLoadingProvider>().setLoading(true);
+      try {
+        int type = _selectedType;
+        int rent = int.parse(_rentController.text);
+        int deposit = int.parse(_depositController.text);
+        String terms = _termsController.text.trim();
+        String features = _featuresController.text.trim();
+        await fbFirestore.collection('ads').add({
+          'userId': user.uid,
+          'type': type,
+          'rent': rent,
+          'deposit': deposit,
+          'parking': parking,
+          'attachedBathroom': attachedBathroom,
+          'separateKitchen': separateKitchen,
+          'petsAllowed': petsAllowed,
+          'water': water,
+          'terms': terms,
+          'features': features,
+          'timestamp': Timestamp.now(),
+        });
+        // resetting and ending job
+        _selectedType = 0;
+        parking = false;
+        attachedBathroom = false;
+        separateKitchen = false;
+        petsAllowed = false;
+        water = false;
+        _rentController.text = '';
+        _depositController.text = '';
+        _featuresController.text = '';
+        _termsController.text = '';
+        _postAdScrollController.animateTo(
+          _postAdScrollController.position.minScrollExtent,
+          curve: Curves.easeIn,
+          duration: Duration(milliseconds: 500),
+        );
+        CustomNotification(
+          color: Colors.green,
+          message: 'Successfully Posted Ad',
+          title: 'Success',
+        ).show(context);
+      } catch (e) {
+        if (e.code == 'network-request-failed') {
+          CustomNotification(
+            title: 'Network Error',
+            message:
+                'No Network Connection. Check your connection and try again.',
+            color: Theme.of(context).errorColor,
+          ).show(context);
+        } else {
+          CustomNotification(
+            color: Colors.red,
+            message: 'An error Occurred',
+            title: 'Error',
+          ).show(context);
+        }
+      }
+      context.read<HomeLoadingProvider>().setLoading(false);
+    }else{
+      _postAdScrollController.animateTo(
+        _postAdScrollController.position.minScrollExtent,
+        curve: Curves.easeIn,
+        duration: Duration(milliseconds: 500),
+      );
     }
   }
 }
