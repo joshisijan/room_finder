@@ -12,12 +12,12 @@ class ChatBoxLeft extends StatefulWidget {
   _ChatBoxLeftState createState() => _ChatBoxLeftState();
 }
 
-class _ChatBoxLeftState extends State<ChatBoxLeft> with SingleTickerProviderStateMixin{
+class _ChatBoxLeftState extends State<ChatBoxLeft>
+    with SingleTickerProviderStateMixin {
   AnimationController _animationController;
 
   @override
   void initState() {
-    // TODO: implement initState
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(
@@ -29,7 +29,6 @@ class _ChatBoxLeftState extends State<ChatBoxLeft> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-
     final _animation = Tween(
       begin: 0.0,
       end: 1.0,
@@ -46,18 +45,16 @@ class _ChatBoxLeftState extends State<ChatBoxLeft> with SingleTickerProviderStat
           child: Text(
             '2017-12-11 10:10',
             style: Theme.of(context).textTheme.caption.copyWith(
-              fontSize: Theme.of(context).textTheme.caption.fontSize * .9,
-            ),
+                  fontSize: Theme.of(context).textTheme.caption.fontSize * .9,
+                ),
           ),
         ),
         GestureDetector(
-          onTap: (){
+          onTap: () {
             _animationController.forward();
-            Timer(
-                Duration(seconds: 4),(){
+            Timer(Duration(seconds: 4), () {
               _animationController.reverse();
-            }
-            );
+            });
           },
           child: Wrap(
             alignment: WrapAlignment.start,
@@ -71,7 +68,9 @@ class _ChatBoxLeftState extends State<ChatBoxLeft> with SingleTickerProviderStat
                   vertical: kDefaultPadding / 1.5,
                 ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor == Colors.black  ? Theme.of(context).accentColor : Theme.of(context).primaryColor,
+                  color: Theme.of(context).primaryColor == Colors.black
+                      ? Theme.of(context).accentColor
+                      : Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(kDefaultPadding),
                     bottomLeft: Radius.circular(kDefaultPadding),
@@ -82,9 +81,10 @@ class _ChatBoxLeftState extends State<ChatBoxLeft> with SingleTickerProviderStat
                   this.widget.text,
                   textAlign: TextAlign.justify,
                   style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    color: Theme.of(context).backgroundColor,
-                    fontSize: Theme.of(context).textTheme.subtitle1.fontSize,
-                  ),
+                        color: Theme.of(context).backgroundColor,
+                        fontSize:
+                            Theme.of(context).textTheme.subtitle1.fontSize,
+                      ),
                 ),
               ),
             ],

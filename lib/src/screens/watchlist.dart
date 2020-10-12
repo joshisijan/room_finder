@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 
-
-class WatchList extends StatefulWidget{
-
+class WatchList extends StatefulWidget {
   @override
   _WatchListState createState() => _WatchListState();
 }
 
-class _WatchListState extends State<WatchList> with SingleTickerProviderStateMixin{
-
+class _WatchListState extends State<WatchList>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabController = TabController(
       length: 3,
@@ -24,13 +21,12 @@ class _WatchListState extends State<WatchList> with SingleTickerProviderStateMix
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _tabController.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Watchlist'),
@@ -51,11 +47,7 @@ class _WatchListState extends State<WatchList> with SingleTickerProviderStateMix
       ),
       body: TabBarView(
         controller: _tabController,
-        children: <Widget>[
-          Container(),
-          Container(),
-          Container()
-        ],
+        children: <Widget>[Container(), Container(), Container()],
       ),
     );
   }

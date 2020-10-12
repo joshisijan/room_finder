@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:room_finder/src/values/constants.dart';
 
 class ChatBoxRight extends StatefulWidget {
-
   final String text;
 
   ChatBoxRight({@required this.text});
@@ -13,13 +12,12 @@ class ChatBoxRight extends StatefulWidget {
   _ChatBoxRightState createState() => _ChatBoxRightState();
 }
 
-class _ChatBoxRightState extends State<ChatBoxRight> with SingleTickerProviderStateMixin{
-
+class _ChatBoxRightState extends State<ChatBoxRight>
+    with SingleTickerProviderStateMixin {
   AnimationController _animationController;
 
   @override
   void initState() {
-    // TODO: implement initState
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(
@@ -42,13 +40,11 @@ class _ChatBoxRightState extends State<ChatBoxRight> with SingleTickerProviderSt
           height: kDefaultPadding * 0.5,
         ),
         GestureDetector(
-          onTap: (){
+          onTap: () {
             _animationController.forward();
-            Timer(
-              Duration(seconds: 4),(){
-                _animationController.reverse();
-              }
-            );
+            Timer(Duration(seconds: 4), () {
+              _animationController.reverse();
+            });
           },
           child: Wrap(
             alignment: WrapAlignment.end,
@@ -77,8 +73,9 @@ class _ChatBoxRightState extends State<ChatBoxRight> with SingleTickerProviderSt
                   this.widget.text,
                   textAlign: TextAlign.justify,
                   style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    fontSize: Theme.of(context).textTheme.subtitle2.fontSize,
-                  ),
+                        fontSize:
+                            Theme.of(context).textTheme.subtitle2.fontSize,
+                      ),
                 ),
               ),
             ],
@@ -89,8 +86,8 @@ class _ChatBoxRightState extends State<ChatBoxRight> with SingleTickerProviderSt
           child: Text(
             '2017-12-11 10:10',
             style: Theme.of(context).textTheme.caption.copyWith(
-              fontSize: Theme.of(context).textTheme.caption.fontSize * .9,
-            ),
+                  fontSize: Theme.of(context).textTheme.caption.fontSize * .9,
+                ),
           ),
         ),
       ],

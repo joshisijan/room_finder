@@ -9,7 +9,6 @@ class _MyAdsState extends State<MyAds> with SingleTickerProviderStateMixin {
   TabController _tabController;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _tabController = TabController(
       length: 3,
@@ -20,7 +19,6 @@ class _MyAdsState extends State<MyAds> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _tabController.dispose();
     super.dispose();
   }

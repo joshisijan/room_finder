@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:room_finder/src/reuseables/custom_button.dart';
-import 'package:room_finder/src/reuseables/notification.dart';
 import 'package:room_finder/src/values/constants.dart';
 
 class VerificationPage extends StatelessWidget {
@@ -51,7 +50,7 @@ class VerificationPage extends StatelessWidget {
                 CustomButton(
                   padded: true,
                   title: Text('Send Verification Code'),
-                  pressed: (){
+                  pressed: () {
                     onSendVerification.call();
                   },
                 ),
@@ -73,7 +72,7 @@ class VerificationPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.close, color: Colors.white),
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: (){
+        onPressed: () {
           onSignOut.call();
         },
       ),

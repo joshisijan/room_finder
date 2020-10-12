@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:room_finder/src/providers/home_loading_provider.dart';
 import 'package:room_finder/src/reuseables/notification.dart';
 import 'package:room_finder/src/screens/edit_profile.dart';
+import 'package:room_finder/src/screens/maps.dart';
 import 'package:room_finder/src/screens/verification.dart';
 import 'package:room_finder/src/values/constants.dart';
 import 'package:room_finder/src/tabs/account_tab.dart';
@@ -12,6 +13,7 @@ import 'package:room_finder/src/tabs/message_tab.dart';
 import 'package:room_finder/src/tabs/post_tab.dart';
 import 'package:room_finder/src/tabs/search_tab.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
   int currentIndex;
   HomePage({Key key, this.currentIndex = 0}) : super(key: key);
@@ -23,12 +25,13 @@ class _HomePageState extends State<HomePage> {
   final PageStorageBucket bucket = PageStorageBucket();
   bool verified = false;
   bool loading = false;
-  bool homeLoading ;
+  bool homeLoading;
 
   @override
   Widget build(BuildContext context) {
     User user = FirebaseAuth.instance.currentUser;
-    homeLoading = context.select((HomeLoadingProvider homeLoadingProvider) => homeLoadingProvider.getLoading);
+    homeLoading = context.select((HomeLoadingProvider homeLoadingProvider) =>
+        homeLoadingProvider.getLoading);
     if (user.emailVerified == true)
       verified = true;
     else
@@ -82,26 +85,39 @@ class _HomePageState extends State<HomePage> {
           });
         },
       );
-    }else if(user.displayName == '' || user.displayName == null){
-      return EditProfile(currentIndex: 0,);
+    } else if (user.displayName == '' || user.displayName == null) {
+      return EditProfile(
+        currentIndex: 0,
+      );
     }
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        bottom: homeLoading ? PreferredSize(
-          preferredSize: Size.fromHeight(4.0),
-          child: LinearProgressIndicator(minHeight: 4.0,),
-        ) : null,
+        bottom: homeLoading
+            ? PreferredSize(
+                preferredSize: Size.fromHeight(4.0),
+                child: LinearProgressIndicator(
+                  minHeight: 4.0,
+                ),
+              )
+            : null,
         title: Text('Room Finder'),
         actions: <Widget>[
           widget.currentIndex == 0 || widget.currentIndex == 1
               ? AbsorbPointer(
-                absorbing: homeLoading,
-                child: IconButton(
-                    icon: Icon(Icons.map, color: homeLoading ? Colors.white54 : Colors.white,),
-                    onPressed: () {},
+                  absorbing: homeLoading,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.map,
+                      color: homeLoading ? Colors.white54 : Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => MapScreen(),
+                      ));
+                    },
                   ),
-              )
+                )
               : SizedBox(),
           SizedBox(
             width: kDefaultPadding / 2,
@@ -165,18 +181,20 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      floatingActionButton: homeLoading ? FloatingActionButton(
-        child: Icon(Icons.close),
-        backgroundColor: Theme.of(context).accentColor,
-        onPressed: (){
-          context.read<HomeLoadingProvider>().setLoading(false);
-          CustomNotification(
-            color: Colors.green,
-            message: 'Don\'t worry it will still run in background.',
-            title: 'Alert',
-          ).show(context);
-        },
-      ): null,
+      floatingActionButton: homeLoading
+          ? FloatingActionButton(
+              child: Icon(Icons.close),
+              backgroundColor: Theme.of(context).accentColor,
+              onPressed: () {
+                context.read<HomeLoadingProvider>().setLoading(false);
+                CustomNotification(
+                  color: Colors.green,
+                  message: 'Don\'t worry it will still run in background.',
+                  title: 'Alert',
+                ).show(context);
+              },
+            )
+          : null,
     );
   }
 
