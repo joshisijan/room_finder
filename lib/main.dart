@@ -4,10 +4,3 @@ import 'package:room_finder/src/app.dart';
 void main(){
   runApp(AppBase());
 }
-
-
-
-
-
-
-
