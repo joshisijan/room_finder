@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:room_finder/src/providers/home_loading_provider.dart';
@@ -300,31 +301,41 @@ class _PostTabState extends State<PostTab> {
                         child: Container(
                           width: MediaQuery.of(context).size.width / 3 - 15.0,
                           height: MediaQuery.of(context).size.width / 3 - 15.0,
-                          margin: EdgeInsets.symmetric(vertical: 1.0,),
+                          margin: EdgeInsets.symmetric(
+                            vertical: 1.0,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.grey,
-                            image: file1 != null ? DecorationImage(
-                              image: FileImage(file1),
-                            ) : null,
+                            image: file1 != null
+                                ? DecorationImage(
+                                    image: FileImage(file1),
+                                  )
+                                : null,
                           ),
                           child: file1 == null ? Icon(Icons.add) : null,
                         ),
-                        onPressed: ()  {
+                        onPressed: () {
                           selectImageAndSave(0);
                         },
                       ),
-                      SizedBox(width: 2.0,),
+                      SizedBox(
+                        width: 2.0,
+                      ),
                       RawMaterialButton(
                         padding: EdgeInsets.zero,
                         child: Container(
                           width: MediaQuery.of(context).size.width / 3 - 15.0,
                           height: MediaQuery.of(context).size.width / 3 - 15.0,
-                          margin: EdgeInsets.symmetric(vertical: 1.0,),
+                          margin: EdgeInsets.symmetric(
+                            vertical: 1.0,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.grey,
-                            image: file2 != null ? DecorationImage(
-                              image: FileImage(file2),
-                            ) : null,
+                            image: file2 != null
+                                ? DecorationImage(
+                                    image: FileImage(file2),
+                                  )
+                                : null,
                           ),
                           child: file2 == null ? Icon(Icons.add) : null,
                         ),
@@ -332,18 +343,24 @@ class _PostTabState extends State<PostTab> {
                           selectImageAndSave(1);
                         },
                       ),
-                      SizedBox(width: 2.0,),
+                      SizedBox(
+                        width: 2.0,
+                      ),
                       RawMaterialButton(
                         padding: EdgeInsets.zero,
                         child: Container(
                           width: MediaQuery.of(context).size.width / 3 - 15.0,
                           height: MediaQuery.of(context).size.width / 3 - 15.0,
-                          margin: EdgeInsets.symmetric(vertical: 1.0,),
+                          margin: EdgeInsets.symmetric(
+                            vertical: 1.0,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.grey,
-                            image: file3 != null ? DecorationImage(
-                              image: FileImage(file3),
-                            ) : null,
+                            image: file3 != null
+                                ? DecorationImage(
+                                    image: FileImage(file3),
+                                  )
+                                : null,
                           ),
                           child: file3 == null ? Icon(Icons.add) : null,
                         ),
@@ -356,12 +373,16 @@ class _PostTabState extends State<PostTab> {
                         child: Container(
                           width: MediaQuery.of(context).size.width / 3 - 15.0,
                           height: MediaQuery.of(context).size.width / 3 - 15.0,
-                          margin: EdgeInsets.symmetric(vertical: 1.0,),
+                          margin: EdgeInsets.symmetric(
+                            vertical: 1.0,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.grey,
-                            image: file4 != null ? DecorationImage(
-                              image: FileImage(file4),
-                            ) : null,
+                            image: file4 != null
+                                ? DecorationImage(
+                                    image: FileImage(file4),
+                                  )
+                                : null,
                           ),
                           child: file4 == null ? Icon(Icons.add) : null,
                         ),
@@ -369,7 +390,9 @@ class _PostTabState extends State<PostTab> {
                           selectImageAndSave(3);
                         },
                       ),
-                      SizedBox(width: 2.0,)
+                      SizedBox(
+                        width: 2.0,
+                      )
                     ],
                   ),
                   SizedBox(
@@ -393,24 +416,24 @@ class _PostTabState extends State<PostTab> {
   }
 
   selectImageAndSave(int n) async {
-    try{
+    try {
       PickedFile pickedFile = await ImagePicker().getImage(
         source: ImageSource.gallery,
       );
-      if(pickedFile != null){
+      if (pickedFile != null) {
         setState(() {
-          if(n == 0){
+          if (n == 0) {
             file1 = File(pickedFile.path);
-          }else if(n == 1){
+          } else if (n == 1) {
             file2 = File(pickedFile.path);
-          }else if(n == 2){
+          } else if (n == 2) {
             file3 = File(pickedFile.path);
-          }else{
+          } else {
             file4 = File(pickedFile.path);
           }
         });
       }
-    }catch(e){
+    } catch (e) {
       CustomNotification(
         color: Colors.red,
         message: 'An error Occurred',
@@ -421,11 +444,10 @@ class _PostTabState extends State<PostTab> {
 
   submitAd() async {
     if (formKey.currentState.validate()) {
-      if(file1 == null && file2 == null && file3 == null && file4 == null){
+      if (file1 == null && file2 == null && file3 == null && file4 == null) {
         CustomNotification(
           title: 'Select Image',
-          message:
-          'At least one image must be selected.',
+          message: 'At least one image must be selected.',
           color: Theme.of(context).errorColor,
         ).show(context);
         return;
@@ -437,7 +459,8 @@ class _PostTabState extends State<PostTab> {
         int deposit = int.parse(_depositController.text);
         String terms = _termsController.text.trim();
         String features = _featuresController.text.trim();
-        await fbFirestore.collection('ads').add({
+        DocumentReference postReference =
+            await fbFirestore.collection('ads').add({
           'userId': user.uid,
           'type': type,
           'rent': rent,
@@ -449,7 +472,57 @@ class _PostTabState extends State<PostTab> {
           'water': water,
           'terms': terms,
           'features': features,
+          'file1': '',
+          'file2': '',
+          'file3': '',
+          'file4': '',
           'timestamp': Timestamp.now(),
+        });
+        // adding image in firebase storage
+        FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+        var downloadUrl1, downloadUrl2, downloadUrl3, downloadUrl4;
+        //for file1 to file4
+        if (file1 != null) {
+          StorageReference storageReferenc1 =
+              firebaseStorage.ref().child('/images/${postReference.id}/1');
+          StorageUploadTask storageUploadTask1 =
+              storageReferenc1.putFile(file1);
+          StorageTaskSnapshot storageTaskSnapshot1 =
+              await storageUploadTask1.onComplete;
+          downloadUrl1 = await storageTaskSnapshot1.ref.getDownloadURL();
+        }
+        if (file2 != null) {
+          StorageReference storageReference2 =
+              firebaseStorage.ref().child('/images/${postReference.id}/2');
+          StorageUploadTask storageUploadTask2 =
+              storageReference2.putFile(file2);
+          StorageTaskSnapshot storageTaskSnapshot2 =
+              await storageUploadTask2.onComplete;
+          downloadUrl2 = await storageTaskSnapshot2.ref.getDownloadURL();
+        }
+        if (file3 != null) {
+          StorageReference storageReference3 =
+              firebaseStorage.ref().child('/images/${postReference.id}/3');
+          StorageUploadTask storageUploadTask3 =
+              storageReference3.putFile(file3);
+          StorageTaskSnapshot storageTaskSnapshot3 =
+              await storageUploadTask3.onComplete;
+          downloadUrl3 = await storageTaskSnapshot3.ref.getDownloadURL();
+        }
+        if (file4 != null) {
+          StorageReference storageReference4 =
+              firebaseStorage.ref().child('/images/${postReference.id}/4');
+          StorageUploadTask storageUploadTask4 =
+              storageReference4.putFile(file4);
+          StorageTaskSnapshot storageTaskSnapshot4 =
+              await storageUploadTask4.onComplete;
+          downloadUrl4 = await storageTaskSnapshot4.ref.getDownloadURL();
+        }
+        await postReference.update({
+          'file1': downloadUrl1 ?? '',
+          'file2': downloadUrl2 ?? '',
+          'file3': downloadUrl3 ?? '',
+          'file4': downloadUrl4 ?? '',
         });
         // resetting and ending job
         _selectedType = 0;
@@ -489,7 +562,7 @@ class _PostTabState extends State<PostTab> {
         }
       }
       context.read<HomeLoadingProvider>().setLoading(false);
-    }else{
+    } else {
       _postAdScrollController.animateTo(
         _postAdScrollController.position.minScrollExtent,
         curve: Curves.easeIn,

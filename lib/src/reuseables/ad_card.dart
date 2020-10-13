@@ -1,9 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:room_finder/src/values/constants.dart';
 import 'package:room_finder/src/screens/ad_detail.dart';
 
-class AdCard extends StatelessWidget {
+class AdCard extends StatefulWidget {
   final List<Widget> images;
   final String adUserId;
   final String currentUserId;
@@ -15,13 +16,43 @@ class AdCard extends StatelessWidget {
 
   AdCard(
       {@required this.images,
-        @required this.adUserId,
-        @required this.currentUserId,
-        @required this.location,
-        @required this.rent,
-        @required this.deposit,
-        @required this.postId,
-        @required this.type});
+      @required this.adUserId,
+      @required this.currentUserId,
+      @required this.location,
+      @required this.rent,
+      @required this.deposit,
+      @required this.postId,
+      @required this.type});
+
+  @override
+  _AdCardState createState() => _AdCardState();
+}
+
+class _AdCardState extends State<AdCard> {
+  String userName = 'Loading...';
+
+  String profilePhotoUrl = '';
+
+  @override
+  void initState() {
+    super.initState();
+    () async {
+      FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+      firebaseFirestore
+          .collection('users')
+          .doc(widget.adUserId)
+          .get()
+          .then((value) {
+        var data = value.data();
+        if (data != null) {
+          setState(() {
+            userName = data['displayName'];
+            profilePhotoUrl = data['photoURL'];
+          });
+        }
+      });
+    }.call();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +75,14 @@ class AdCard extends StatelessWidget {
                       return AdDetail();
                     }));
                   },
-                   child: CircleAvatar(
-                     radius: kDefaultPadding,
-                     backgroundColor: Theme.of(context).accentColor,
-                   ),
+                  child: CircleAvatar(
+                    radius: kDefaultPadding,
+                    backgroundColor: Theme.of(context).accentColor,
+                    backgroundImage:
+                        profilePhotoUrl == '' || profilePhotoUrl == null
+                            ? null
+                            : NetworkImage(profilePhotoUrl),
+                  ),
                 ),
               ),
               title: Column(
@@ -63,7 +98,10 @@ class AdCard extends StatelessWidget {
                         return AdDetail();
                       }));
                     },
-                    child: Text('user name'),
+                    child: Text(
+                      userName,
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -73,7 +111,7 @@ class AdCard extends StatelessWidget {
                       }));
                     },
                     child: Text(
-                      location,
+                      widget.location,
                       style: Theme.of(context).textTheme.caption,
                     ),
                   ),
@@ -88,9 +126,7 @@ class AdCard extends StatelessWidget {
                     Icons.favorite_border,
                     color: Theme.of(context).textTheme.subtitle1.color,
                   ),
-                  onPressed: () {
-
-                  },
+                  onPressed: () {},
                 ),
               ],
             ),
@@ -105,9 +141,10 @@ class AdCard extends StatelessWidget {
             },
             child: CarouselSlider(
               options: CarouselOptions(
+                enableInfiniteScroll: false,
                 height: 200,
               ),
-              items: images,
+              items: widget.images,
             ),
           ),
           Row(
@@ -130,7 +167,7 @@ class AdCard extends StatelessWidget {
                     height: kDefaultPadding / 2,
                   ),
                   Text(
-                    'Rs.' + rent.toString() + '/M',
+                    'Rs.' + widget.rent.toString() + '/M',
                     style: Theme.of(context).textTheme.subtitle2.copyWith(
                           fontSize:
                               Theme.of(context).textTheme.caption.fontSize,
@@ -157,7 +194,7 @@ class AdCard extends StatelessWidget {
                     height: kDefaultPadding / 2,
                   ),
                   Text(
-                    'Rs.' + deposit.toString(),
+                    'Rs.' + widget.deposit.toString(),
                     style: Theme.of(context).textTheme.subtitle2.copyWith(
                           fontSize:
                               Theme.of(context).textTheme.caption.fontSize,
@@ -176,19 +213,23 @@ class AdCard extends StatelessWidget {
                   Text(
                     'Type',
                     style: Theme.of(context).textTheme.caption.copyWith(
-                      fontSize:
-                      Theme.of(context).textTheme.subtitle2.fontSize,
-                    ),
+                          fontSize:
+                              Theme.of(context).textTheme.subtitle2.fontSize,
+                        ),
                   ),
                   SizedBox(
                     height: kDefaultPadding / 2,
                   ),
                   Text(
-                    type == 0 ? 'Rent' : type == 1 ? 'Roommate' : 'Paying Guest',
+                    widget.type == 0
+                        ? 'Rent'
+                        : widget.type == 1
+                            ? 'Roommate'
+                            : 'Paying Guest',
                     style: Theme.of(context).textTheme.subtitle2.copyWith(
-                      fontSize:
-                      Theme.of(context).textTheme.caption.fontSize,
-                    ),
+                          fontSize:
+                              Theme.of(context).textTheme.caption.fontSize,
+                        ),
                   ),
                   SizedBox(
                     height: kDefaultPadding / 2,
@@ -202,5 +243,4 @@ class AdCard extends StatelessWidget {
       ),
     );
   }
-
 }

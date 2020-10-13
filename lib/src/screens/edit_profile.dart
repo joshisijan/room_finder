@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +22,10 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-
   bool loading = false;
   File imageFile;
   TextEditingController _nameController;
-  final formKey= GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -48,23 +48,28 @@ class _EditProfileState extends State<EditProfile> {
         automaticallyImplyLeading: false,
         bottom: loading
             ? PreferredSize(
-          preferredSize: Size.fromHeight(4.0),
-          child: LinearProgressIndicator(
-            minHeight: 4.0,
-          ),
-        )
+                preferredSize: Size.fromHeight(4.0),
+                child: LinearProgressIndicator(
+                  minHeight: 4.0,
+                ),
+              )
             : null,
         title: Text('edit profile'),
         leading: BackButton(
-          onPressed: (){
-            if(user.displayName == '' || user.displayName == null){
+          onPressed: () {
+            if (user.displayName == '' || user.displayName == null) {
               CustomNotification(
                 color: Colors.red,
                 title: 'Account Detail',
                 message: 'Name is compulsory.',
               ).show(context);
-            }else{
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(currentIndex: widget.currentIndex,)));
+            } else {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HomePage(
+                            currentIndex: widget.currentIndex,
+                          )));
             }
           },
         ),
@@ -83,49 +88,59 @@ class _EditProfileState extends State<EditProfile> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    user.photoURL == null ? imageFile == null ? CircleAvatar(
-                      backgroundColor: Theme.of(context).accentColor,
-                      radius: kDefaultPadding * 2,
-                    ) : GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return PhotoViewerPage(file: imageFile);
-                          },
-                        ));
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: Theme.of(context).accentColor,
-                        backgroundImage: FileImage(imageFile),
-                        radius: kDefaultPadding * 2,
-                      ),
-                    ) : imageFile == null ? GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return NetworkPhotoViewPage(url: user.photoURL);
-                          },
-                        ));
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: Theme.of(context).accentColor,
-                        radius: kDefaultPadding * 2,
-                        backgroundImage: NetworkImage(user.photoURL),
-                      ),
-                    ) : GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) {
-                            return PhotoViewerPage(file: imageFile);
-                          },
-                        ));
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: Theme.of(context).accentColor,
-                        backgroundImage: FileImage(imageFile),
-                        radius: kDefaultPadding * 2,
-                      ),
-                    ),
+                    user.photoURL == null
+                        ? imageFile == null
+                            ? CircleAvatar(
+                                backgroundColor: Theme.of(context).accentColor,
+                                radius: kDefaultPadding * 2,
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) {
+                                      return PhotoViewerPage(file: imageFile);
+                                    },
+                                  ));
+                                },
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      Theme.of(context).accentColor,
+                                  backgroundImage: FileImage(imageFile),
+                                  radius: kDefaultPadding * 2,
+                                ),
+                              )
+                        : imageFile == null
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) {
+                                      return NetworkPhotoViewPage(
+                                          url: user.photoURL);
+                                    },
+                                  ));
+                                },
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      Theme.of(context).accentColor,
+                                  radius: kDefaultPadding * 2,
+                                  backgroundImage: NetworkImage(user.photoURL),
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) {
+                                      return PhotoViewerPage(file: imageFile);
+                                    },
+                                  ));
+                                },
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      Theme.of(context).accentColor,
+                                  backgroundImage: FileImage(imageFile),
+                                  radius: kDefaultPadding * 2,
+                                ),
+                              ),
                   ],
                 ),
                 SizedBox(
@@ -160,16 +175,18 @@ class _EditProfileState extends State<EditProfile> {
                   enabled: true,
                   title: 'Display Name:',
                   inputType: TextInputType.text,
-                  helper: user.displayName == null || user.displayName == '' ? 'eg. Peter Parker' : 'Current Name: ${user.displayName.toUpperCase()}',
+                  helper: user.displayName == null || user.displayName == ''
+                      ? 'eg. Peter Parker'
+                      : 'Current Name: ${user.displayName.toUpperCase()}',
                   hint: 'New Display Name',
                   controller: _nameController,
-                  validator: (value){
-                    if(value.toString().trim().isEmpty){
+                  validator: (value) {
+                    if (value.toString().trim().isEmpty) {
                       return 'fill out Name first';
                     }
                     return null;
                   },
-                  submitted: (x){
+                  submitted: (x) {
                     submitted();
                   },
                   pass: false,
@@ -180,7 +197,7 @@ class _EditProfileState extends State<EditProfile> {
                 CustomButton(
                   padded: true,
                   title: Text('Save Changes'),
-                  pressed: (){
+                  pressed: () {
                     FocusScope.of(context).unfocus();
                     submitted();
                   },
@@ -203,25 +220,25 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  Future chooseImage()async{
-    try{
+  Future chooseImage() async {
+    try {
       setState(() {
         loading = true;
       });
       PickedFile pickedFile = await ImagePicker().getImage(
         source: ImageSource.gallery,
       );
-      if(pickedFile != null){
+      if (pickedFile != null) {
         setState(() {
           imageFile = File(pickedFile.path);
           loading = false;
         });
-      }else{
+      } else {
         setState(() {
           loading = false;
         });
       }
-    }catch(e){
+    } catch (e) {
       setState(() {
         loading = false;
       });
@@ -234,51 +251,62 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   void submitted() async {
-    if(formKey.currentState.validate()){
+    if (formKey.currentState.validate()) {
       setState(() {
         loading = true;
       });
-      try{
+      try {
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
         String name = _nameController.text.trim();
         User user = FirebaseAuth.instance.currentUser;
-        if(imageFile == null){
+        if (imageFile == null) {
           await user.updateProfile(
             displayName: name,
           );
+          // saving data making a user collection
+          await firebaseFirestore.collection('users').doc(user.uid).update({
+            'displayName': name,
+          });
           CustomNotification(
             title: 'Profile Update',
-            message:
-            'Profile Update Successful',
+            message: 'Profile Update Successful',
             color: Colors.green,
           ).show(context);
-        }else{
+        } else {
           FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-          StorageReference storageReference = firebaseStorage.ref().child('/images/${user.uid}');
-          StorageUploadTask storageUploadTask = storageReference.putFile(imageFile);
-          StorageTaskSnapshot storageTaskSnapshot = await storageUploadTask.onComplete;
+          StorageReference storageReference =
+              firebaseStorage.ref().child('/images/${user.uid}');
+          StorageUploadTask storageUploadTask =
+              storageReference.putFile(imageFile);
+          StorageTaskSnapshot storageTaskSnapshot =
+              await storageUploadTask.onComplete;
           var downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
           await user.updateProfile(
             displayName: name,
             photoURL: downloadUrl,
           );
+          // saving data making a user collection
+          await firebaseFirestore.collection('users').doc(user.uid).update({
+            'displayName': name,
+            'photoURL': downloadUrl,
+          });
           CustomNotification(
             title: 'Profile Update',
-            message:
-            'Profile Update Successful',
+            message: 'Profile Update Successful',
             color: Colors.green,
           ).show(context);
         }
         _nameController.text = '';
         await user.reload();
-      }catch(e){
+      } catch (e) {
         if (e.code == 'network-request-failed') {
           CustomNotification(
             title: 'Network Error',
             message:
-            'No Network Connection. Check your connection and try again.',
+                'No Network Connection. Check your connection and try again.',
             color: Theme.of(context).errorColor,
           ).show(context);
-        }else{
+        } else {
           CustomNotification(
             title: 'Error',
             message: 'An error occurred',

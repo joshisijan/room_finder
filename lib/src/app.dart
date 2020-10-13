@@ -8,23 +8,20 @@ import 'package:room_finder/src/screens/home.dart';
 import 'package:room_finder/src/screens/signin.dart';
 import 'package:room_finder/src/styles/theme.dart';
 
-
 class AppBase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => HomeLoadingProvider(),
-        ),
-      ],
-      builder: (context, child) {
-        return App();
-      }
-    );
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => HomeLoadingProvider(),
+          ),
+        ],
+        builder: (context, child) {
+          return App();
+        });
   }
 }
-
 
 class App extends StatefulWidget {
   @override

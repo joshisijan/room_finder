@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -62,8 +63,15 @@ class _HomePageState extends State<HomePage> {
           });
         },
         onVerified: () async {
+          FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
           setState(() {
             loading = true;
+          });
+          await firebaseFirestore.collection('users').doc(user.uid).set({
+            'displayName': user.displayName,
+            'email': user.email,
+            'photoURL': user.photoURL,
+            'uid': user.uid,
           });
           await user.reload();
           setState(() {
