@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
             : null,
         title: Text('Room Finder'),
         actions: <Widget>[
-          widget.currentIndex == 0 || widget.currentIndex == 1
+          widget.currentIndex == 1
               ? AbsorbPointer(
                   absorbing: homeLoading,
                   child: IconButton(
