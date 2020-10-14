@@ -8,9 +8,9 @@ import 'package:room_finder/src/screens/settings.dart';
 import 'package:room_finder/src/screens/signin.dart';
 import 'package:room_finder/src/screens/watchlist.dart';
 import 'package:provider/provider.dart';
+import 'package:room_finder/src/reuseables/circular_cache_image.dart';
 
 class AccountTab extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     User user = FirebaseAuth.instance.currentUser;
@@ -20,7 +20,7 @@ class AccountTab extends StatelessWidget {
           UserAccountsDrawerHeader(
             currentAccountPicture: GestureDetector(
               onTap: () {
-                if(user.photoURL != null){
+                if (user.photoURL != null) {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) {
                       return NetworkPhotoViewPage(url: user.photoURL);
@@ -28,12 +28,19 @@ class AccountTab extends StatelessWidget {
                   ));
                 }
               },
-              child: user.photoURL != null ? CircleAvatar(
-                backgroundImage: NetworkImage(user.photoURL),
-              ) : CircleAvatar(
-                backgroundColor: Theme.of(context).cardColor,
-                child: Icon(Icons.person, size: 36.0,),
-              ),
+              child: user.photoURL != null
+                  ? CircularCacheImage(
+                      photoUrl: user.photoURL,
+                      borderColor: Theme.of(context).cardColor.withAlpha(100),
+                      diameter: 200.0,
+                    )
+                  : CircleAvatar(
+                      backgroundColor: Theme.of(context).cardColor,
+                      child: Icon(
+                        Icons.person,
+                        size: 36.0,
+                      ),
+                    ),
             ),
             otherAccountsPictures: <Widget>[
               IconButton(
@@ -51,7 +58,9 @@ class AccountTab extends StatelessWidget {
               ),
             ],
             accountEmail: Text('Email: ${user.email}'),
-            accountName: user.displayName == '' ? Text('unnamed') : Text('Name: ${user.displayName}'),
+            accountName: user.displayName == ''
+                ? Text('unnamed')
+                : Text('Name: ${user.displayName}'),
           ),
           ListTile(
             title: Text('My Ads'),
@@ -77,7 +86,8 @@ class AccountTab extends StatelessWidget {
           ListTile(
             title: Text('App Settings'),
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingPage()));
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => SettingPage()));
             },
             trailing: Icon(Icons.settings),
           ),
@@ -87,7 +97,8 @@ class AccountTab extends StatelessWidget {
               context.read<HomeLoadingProvider>().setLoading(true);
               await FirebaseAuth.instance.signOut();
               context.read<HomeLoadingProvider>().setLoading(false);
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SignInPage()));
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => SignInPage()));
             },
             trailing: Icon(Icons.close),
           ),
