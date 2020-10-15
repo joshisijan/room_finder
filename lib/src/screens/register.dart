@@ -48,11 +48,11 @@ class _RegisterPageState extends State<RegisterPage> {
         title: Text('SpareRoom'),
         bottom: loading
             ? PreferredSize(
-          preferredSize: Size.fromHeight(4.0),
-          child: LinearProgressIndicator(
-            minHeight: 4.0,
-          ),
-        )
+                preferredSize: Size.fromHeight(4.0),
+                child: LinearProgressIndicator(
+                  minHeight: 4.0,
+                ),
+              )
             : null,
       ),
       body: AbsorbPointer(
@@ -174,9 +174,15 @@ class _RegisterPageState extends State<RegisterPage> {
                     textAlign: TextAlign.center,
                   ),
                   RawMaterialButton(
-                    child: Text('Sign In', style: TextStyle(color: Theme.of(context).accentColor,),),
-                    onPressed: (){
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SignInPage()));
+                    child: Text(
+                      'Sign In',
+                      style: TextStyle(
+                        color: Theme.of(context).accentColor,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => SignInPage()));
                     },
                   ),
                   SizedBox(
@@ -199,12 +205,13 @@ class _RegisterPageState extends State<RegisterPage> {
       String email = _emailController.text.trim();
       String password = _passwordController.text.trim();
       try {
-        await fbAuth.createUserWithEmailAndPassword(email: email, password: password);
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SignInPage()));
+        await fbAuth.createUserWithEmailAndPassword(
+            email: email, password: password);
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => SignInPage()));
         CustomNotification(
           title: 'Registration',
-          message:
-          'Successfully registered now you can sign in.',
+          message: 'Successfully registered now you can sign in.',
           color: Colors.green,
         ).show(context);
         _emailController.text = '';
@@ -214,13 +221,19 @@ class _RegisterPageState extends State<RegisterPage> {
           CustomNotification(
             title: 'Network Error',
             message:
-            'No Network Connection. Check your connection and try again.',
+                'No Network Connection. Check your connection and try again.',
+            color: Theme.of(context).errorColor,
+          ).show(context);
+        } else if (e.code == 'email-already-in-use') {
+          CustomNotification(
+            title: 'Registration Error',
+            message: 'Account with email address already exists',
             color: Theme.of(context).errorColor,
           ).show(context);
         } else {
           CustomNotification(
             title: 'Registration Error',
-            message: e.code.toString() + 'An error occurred!',
+            message: 'An error occurred!',
             color: Theme.of(context).errorColor,
           ).show(context);
         }
