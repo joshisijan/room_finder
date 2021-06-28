@@ -10,9 +10,8 @@ class CustomButton extends StatelessWidget {
   final Function pressed;
   final bool padded;
   final Color bgColor;
-  final IconData leadingIcon;
 
-  CustomButton({@required this.title, @required this.pressed, @required this.padded, this.bgColor, this.leadingIcon});
+  CustomButton({@required this.title, @required this.pressed, @required this.padded, this.bgColor});
 
   @override
   Widget build(BuildContext context) {

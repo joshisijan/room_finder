@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:room_finder/src/providers/home_loading_provider.dart';
+import 'package:room_finder/src/providers/post_location_provider.dart';
 import 'package:room_finder/src/screens/home.dart';
 import 'package:room_finder/src/screens/signin.dart';
 import 'package:room_finder/src/styles/theme.dart';
@@ -15,6 +16,9 @@ class AppBase extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(
             create: (context) => HomeLoadingProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => PostLocationProvider(),
           ),
         ],
         builder: (context, child) {

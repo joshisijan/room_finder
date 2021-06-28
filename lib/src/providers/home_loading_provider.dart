@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class HomeLoadingProvider extends ChangeNotifier {
-
   //loading state
   bool _loading = false;
 
