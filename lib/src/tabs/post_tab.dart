@@ -281,6 +281,10 @@ class _PostTabState extends State<PostTab> {
                   SizedBox(
                     height: kDefaultPadding,
                   ),
+                
+                  SizedBox(
+                    height: kDefaultPadding,
+                  ),
                   Text(
                     'Images',
                     style: TextStyle(

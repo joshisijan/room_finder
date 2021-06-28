@@ -14,7 +14,9 @@ ThemeData lightTheme = ThemeData(
   backgroundColor: lightBG,
   primaryColor: lightPrimary,
   accentColor:  lightAccent,
-  cursorColor: lightAccent,
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: lightAccent,
+  ),
   scaffoldBackgroundColor: lightBG,
   buttonColor: lightPrimary,
   appBarTheme: AppBarTheme(
@@ -28,7 +30,9 @@ ThemeData darkTheme = ThemeData(
   primaryColor: darkPrimary,
   accentColor: darkAccent,
   scaffoldBackgroundColor: darkBG,
-  cursorColor: darkAccent,
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: darkAccent,
+  ),
   appBarTheme: AppBarTheme(
     elevation: 0,
   ),
