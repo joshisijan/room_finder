@@ -67,9 +67,9 @@ class HomeTab extends StatelessWidget {
                     currentUserId: user.uid,
                     deposit: data['deposit'],
                     rent: data['rent'],
-                    location: 'location',
                     postId: data.reference.documentID,
                     type: data['type'],
+                    terms: data['terms'],
                     images: List.generate(
                       4,
                       (index) {

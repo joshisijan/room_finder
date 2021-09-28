@@ -9,20 +9,20 @@ class AdCard extends StatefulWidget {
   final List<Widget> images;
   final String adUserId;
   final String currentUserId;
-  final String location;
   final int rent;
   final int deposit;
   final String postId;
   final int type;
+  final String terms;
 
   AdCard(
       {@required this.images,
       @required this.adUserId,
       @required this.currentUserId,
-      @required this.location,
       @required this.rent,
       @required this.deposit,
       @required this.postId,
+      @required this.terms,
       @required this.type});
 
   @override
@@ -68,8 +68,8 @@ class _AdCardState extends State<AdCard> {
               'images': widget.images,
               'adUserId': widget.adUserId,
               'currentUserId': widget.currentUserId,
-              'location': widget.location,
               'postId': widget.postId,
+              'terms': widget.terms,
             },
           );
         }));
@@ -106,10 +106,6 @@ class _AdCardState extends State<AdCard> {
                     Text(
                       userName,
                       style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    Text(
-                      widget.location,
-                      style: Theme.of(context).textTheme.caption,
                     ),
                     SizedBox(
                       height: kDefaultPadding / 2,

@@ -44,10 +44,6 @@ class AdDetail extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               AdDetailColumn(
-                title: 'Location',
-                value: adDetail['location'],
-              ),
-              AdDetailColumn(
                 title: 'Rent',
                 value: adDetail['rent'].toString(),
               ),
@@ -62,6 +58,10 @@ class AdDetail extends StatelessWidget {
                     : adDetail['type'] == 1
                         ? 'Flatmate'
                         : 'Paying Guest',
+              ),
+              AdDetailColumn(
+                title: 'Terms',
+                value: adDetail['terms'],
               ),
             ]),
           ),
