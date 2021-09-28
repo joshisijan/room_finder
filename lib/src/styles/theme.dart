@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 //Colors for theme
 //Color lightPrimary = Color(0xfffcfcff);
 Color lightPrimary = Color(0xff0f52ba);
@@ -13,7 +12,7 @@ Color darkBG = Colors.black;
 ThemeData lightTheme = ThemeData(
   backgroundColor: lightBG,
   primaryColor: lightPrimary,
-  accentColor:  lightAccent,
+  accentColor: lightAccent,
   textSelectionTheme: TextSelectionThemeData(
     cursorColor: lightAccent,
   ),

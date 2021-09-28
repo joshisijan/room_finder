@@ -4,7 +4,6 @@ import 'package:room_finder/src/reuseables/custom_button.dart';
 import 'package:room_finder/src/values/constants.dart';
 
 class SearchTab extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     User user = FirebaseAuth.instance.currentUser;
@@ -36,18 +35,14 @@ class SearchTab extends StatelessWidget {
                 ),
                 CustomButton(
                   padded: false,
-                  bgColor: Theme.of(context).accentColor,
+                  bgColor: Theme.of(context).colorScheme.secondary,
                   title: Text('Search rooms'),
-                  pressed: (){
-
-                  },
+                  pressed: () {},
                 ),
                 CustomButton(
                   padded: false,
                   title: Text('Search flatmates'),
-                  pressed: (){
-
-                  },
+                  pressed: () {},
                 ),
               ],
             ),

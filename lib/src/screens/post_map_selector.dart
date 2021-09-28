@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:room_finder/src/providers/post_location_provider.dart';
@@ -32,9 +33,18 @@ class PostMapSelector extends StatelessWidget {
       body: GoogleMap(
         initialCameraPosition: cameraPosition,
         myLocationEnabled: true,
-        myLocationButtonEnabled: true,
-        onMapCreated: (controller) {
+        onMapCreated: (controller) async {
           _controller.complete(controller);
+          Position currentPosition = await Geolocator.getCurrentPosition();
+          controller.animateCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target:
+                    LatLng(currentPosition.latitude, currentPosition.longitude),
+                zoom: 16,
+              ),
+            ),
+          );
         },
         onTap: (latLng) async {
           await context.read<PostLocationProvider>().setLatLng(latLng);
