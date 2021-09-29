@@ -73,7 +73,7 @@ class _MapScreenState extends State<MapScreen> {
                   color: Colors.black,
                 ),
               ),
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
               onPressed: () {},
             )
           : null,
@@ -97,7 +97,7 @@ class _MapScreenState extends State<MapScreen> {
                     ],
                   )
                 : MaterialButton(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).colorScheme.secondary,
                     child: Text(
                       'Show rooms nearby',
                       style: TextStyle(
@@ -121,7 +121,7 @@ class _MapScreenState extends State<MapScreen> {
         initialCameraPosition: cameraPosition,
         myLocationEnabled: true,
         markers: markers,
-        onTap: (LatLng) {
+        onTap: (latLng) {
           if (showingBtn) {
             setState(() {
               showingBtn = !showingBtn;

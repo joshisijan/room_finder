@@ -69,7 +69,7 @@ class _ChatBoxLeftState extends State<ChatBoxLeft>
                 ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor == Colors.black
-                      ? Theme.of(context).accentColor
+                      ? Theme.of(context).colorScheme.secondary
                       : Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(kDefaultPadding),

@@ -72,18 +72,6 @@ class AccountTab extends StatelessWidget {
             trailing: Icon(Icons.apps),
           ),
           ListTile(
-            title: Text('My Watchlists'),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return WatchList();
-              }));
-            },
-            trailing: Icon(
-              Icons.favorite,
-              color: Colors.red,
-            ),
-          ),
-          ListTile(
             title: Text('App Settings'),
             onTap: () {
               Navigator.of(context)

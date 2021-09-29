@@ -40,7 +40,9 @@ class HomeTab extends StatelessWidget {
           ),
         ),
         StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('ads').snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection('ads')
+              .where('userId', whereNotIn: [user.uid]).snapshots(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Container(
@@ -75,7 +77,6 @@ class HomeTab extends StatelessWidget {
                       (index) {
                         int i = index + 1;
                         if (data['file$i'] != '') {
-                          // return Image.network(data['file$i']);
                           return CustomCacheImage(imageUrl: data['file$i']);
                         }
                         return null;

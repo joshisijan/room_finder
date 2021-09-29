@@ -12,12 +12,13 @@ Color darkBG = Colors.black;
 ThemeData lightTheme = ThemeData(
   backgroundColor: lightBG,
   primaryColor: lightPrimary,
-  accentColor: lightAccent,
   textSelectionTheme: TextSelectionThemeData(
     cursorColor: lightAccent,
   ),
   scaffoldBackgroundColor: lightBG,
-  buttonColor: lightPrimary,
+  colorScheme: ThemeData.light().colorScheme.copyWith(
+        secondary: lightAccent,
+      ),
   appBarTheme: AppBarTheme(
     elevation: 0,
   ),
@@ -27,7 +28,9 @@ ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   backgroundColor: darkBG,
   primaryColor: darkPrimary,
-  accentColor: darkAccent,
+  colorScheme: ThemeData.light().colorScheme.copyWith(
+        secondary: lightAccent,
+      ),
   scaffoldBackgroundColor: darkBG,
   textSelectionTheme: TextSelectionThemeData(
     cursorColor: darkAccent,

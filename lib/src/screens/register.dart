@@ -177,7 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Text(
                       'Sign In',
                       style: TextStyle(
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                     onPressed: () {

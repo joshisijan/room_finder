@@ -139,7 +139,9 @@ class _SignInPageState extends State<SignInPage> {
                     },
                     pass: false,
                   ),
-                  SizedBox(height: kDefaultPadding,),
+                  SizedBox(
+                    height: kDefaultPadding,
+                  ),
                   CustomFormField(
                     title: 'Password:',
                     hint: 'Password',
@@ -177,9 +179,15 @@ class _SignInPageState extends State<SignInPage> {
                     textAlign: TextAlign.center,
                   ),
                   RawMaterialButton(
-                    child: Text('Register', style: TextStyle(color: Theme.of(context).accentColor,),),
-                    onPressed: (){
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => RegisterPage()));
+                    child: Text(
+                      'Register',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => RegisterPage()));
                     },
                   ),
                   Text(
@@ -188,10 +196,13 @@ class _SignInPageState extends State<SignInPage> {
                     textAlign: TextAlign.center,
                   ),
                   RawMaterialButton(
-                    child: Text('Forget Password', style: TextStyle(color: Theme.of(context).accentColor,),),
-                    onPressed: (){
-
-                    },
+                    child: Text(
+                      'Forget Password',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    onPressed: () {},
                   ),
                   SizedBox(
                     height: 40.0,
@@ -213,9 +224,11 @@ class _SignInPageState extends State<SignInPage> {
       String email = _emailController.text.trim();
       String password = _passwordController.text;
       try {
-        UserCredential user = await fbAuth.signInWithEmailAndPassword(email: email, password: password);
-        if(user != null){
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+        UserCredential user = await fbAuth.signInWithEmailAndPassword(
+            email: email, password: password);
+        if (user != null) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => HomePage()));
         }
         _emailController.text = '';
         _passwordController.text = '';
@@ -224,28 +237,28 @@ class _SignInPageState extends State<SignInPage> {
           CustomNotification(
             title: 'Network Error',
             message:
-            'No Network Connection. Check your connection and try again.',
+                'No Network Connection. Check your connection and try again.',
             color: Theme.of(context).errorColor,
           ).show(context);
-        } else if(e.code == 'user-not-found'){
+        } else if (e.code == 'user-not-found') {
           CustomNotification(
             title: 'Sign In Error',
             message: '$email is not Registered.',
             color: Theme.of(context).errorColor,
           ).show(context);
-        }else if (e.code == 'user-disabled') {
+        } else if (e.code == 'user-disabled') {
           CustomNotification(
             title: 'Sign In Error',
             message: 'Your Account is disabled.',
             color: Theme.of(context).errorColor,
           ).show(context);
-        }else if(e.code == 'wrong-password'){
+        } else if (e.code == 'wrong-password') {
           CustomNotification(
             title: 'Sign In Error',
             message: 'Incorrect Password.',
             color: Theme.of(context).errorColor,
           ).show(context);
-        }else {
+        } else {
           CustomNotification(
             title: 'Sign In Error',
             message: e.code.toString() + 'An error occurred!',

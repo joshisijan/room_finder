@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
               }
             },
             selectedFontSize: Theme.of(context).textTheme.caption.fontSize,
-            selectedItemColor: Theme.of(context).accentColor,
+            selectedItemColor: Theme.of(context).colorScheme.secondary,
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
@@ -192,7 +192,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: homeLoading
           ? FloatingActionButton(
               child: Icon(Icons.close),
-              backgroundColor: Theme.of(context).accentColor,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
               onPressed: () {
                 context.read<HomeLoadingProvider>().setLoading(false);
                 CustomNotification(

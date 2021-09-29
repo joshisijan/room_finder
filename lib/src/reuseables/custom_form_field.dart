@@ -97,13 +97,13 @@ class CustomFormField extends StatelessWidget {
               filled: true,
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
               border: OutlineInputBorder(),
               focusedErrorBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ),

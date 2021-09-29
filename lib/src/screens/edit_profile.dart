@@ -91,7 +91,8 @@ class _EditProfileState extends State<EditProfile> {
                     user.photoURL == null
                         ? imageFile == null
                             ? CircleAvatar(
-                                backgroundColor: Theme.of(context).accentColor,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.secondary,
                                 radius: kDefaultPadding * 2,
                               )
                             : GestureDetector(
@@ -104,7 +105,7 @@ class _EditProfileState extends State<EditProfile> {
                                 },
                                 child: CircleAvatar(
                                   backgroundColor:
-                                      Theme.of(context).accentColor,
+                                      Theme.of(context).colorScheme.secondary,
                                   backgroundImage: FileImage(imageFile),
                                   radius: kDefaultPadding * 2,
                                 ),
@@ -121,7 +122,7 @@ class _EditProfileState extends State<EditProfile> {
                                 },
                                 child: CircleAvatar(
                                   backgroundColor:
-                                      Theme.of(context).accentColor,
+                                      Theme.of(context).colorScheme.secondary,
                                   radius: kDefaultPadding * 2,
                                   backgroundImage: NetworkImage(user.photoURL),
                                 ),
@@ -136,7 +137,7 @@ class _EditProfileState extends State<EditProfile> {
                                 },
                                 child: CircleAvatar(
                                   backgroundColor:
-                                      Theme.of(context).accentColor,
+                                      Theme.of(context).colorScheme.secondary,
                                   backgroundImage: FileImage(imageFile),
                                   radius: kDefaultPadding * 2,
                                 ),
