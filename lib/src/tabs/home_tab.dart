@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:room_finder/src/reuseables/ad_card.dart';
 import 'package:room_finder/src/reuseables/cache_image.dart';
 import 'package:room_finder/src/values/constants.dart';
@@ -65,6 +66,8 @@ class HomeTab extends StatelessWidget {
               return Column(
                 children: datas.map<Widget>((data) {
                   return AdCard(
+                    adId: data.id,
+                    latLng: LatLng(data['lat'], data['lng']),
                     adUserId: data['userId'],
                     currentUserId: user.uid,
                     deposit: data['deposit'],

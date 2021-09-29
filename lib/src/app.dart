@@ -41,7 +41,7 @@ class _AppState extends State<App> {
       title: 'Main App',
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
-      darkTheme: darkTheme,
+      // darkTheme: darkTheme,
       home: FutureBuilder(
           future: Firebase.initializeApp(),
           builder: (context, snapshot) {

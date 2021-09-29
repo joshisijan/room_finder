@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:room_finder/src/values/constants.dart';
 import 'package:room_finder/src/screens/ad_detail.dart';
-import 'package:room_finder/src/reuseables/circular_cache_image.dart';
 
-class AdCard extends StatefulWidget {
+class MessageAdDetail extends StatefulWidget {
   final String adId;
   final List<Widget> images;
   final String adUserId;
@@ -18,7 +17,7 @@ class AdCard extends StatefulWidget {
   final String terms;
   final LatLng latLng;
 
-  AdCard(
+  MessageAdDetail(
       {@required this.images,
       @required this.adId,
       @required this.adUserId,
@@ -31,10 +30,10 @@ class AdCard extends StatefulWidget {
       @required this.type});
 
   @override
-  _AdCardState createState() => _AdCardState();
+  _MessageAdDetailState createState() => _MessageAdDetailState();
 }
 
-class _AdCardState extends State<AdCard> {
+class _MessageAdDetailState extends State<MessageAdDetail> {
   String userName = 'Loading...';
 
   String profilePhotoUrl = '';
@@ -89,35 +88,14 @@ class _AdCardState extends State<AdCard> {
               padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
               child: AppBar(
                 backgroundColor: Colors.transparent,
+                centerTitle: true,
+                leading: SizedBox.shrink(),
                 elevation: 0.0,
-                automaticallyImplyLeading: false,
-                leading: Padding(
-                  padding: EdgeInsets.all(kDefaultPadding / 2),
-                  child: profilePhotoUrl != ''
-                      ? CircularCacheImage(
-                          photoUrl: profilePhotoUrl,
-                          borderColor: Theme.of(context)
-                              .textTheme
-                              .caption
-                              .color
-                              .withAlpha(100),
-                        )
-                      : SizedBox.shrink(),
-                ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: kDefaultPadding / 2,
-                    ),
-                    Text(
-                      userName,
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    SizedBox(
-                      height: kDefaultPadding / 2,
-                    ),
-                  ],
+                title: Text(
+                  'For ad:',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColorDark,
+                  ),
                 ),
               ),
             ),

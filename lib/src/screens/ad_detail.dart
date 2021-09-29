@@ -1,13 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:room_finder/src/screens/ad_map.dart';
+import 'package:room_finder/src/screens/message_container.dart';
 import 'package:room_finder/src/values/constants.dart';
 
 class AdDetail extends StatelessWidget {
   final Map<String, dynamic> adDetail;
+  final bool isOwn;
 
   const AdDetail({
     Key key,
     @required this.adDetail,
+    this.isOwn = false,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -16,12 +20,34 @@ class AdDetail extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.map),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AdMap(
+                    latlng: adDetail['latLng'],
+                  ),
+                ),
+              );
+            },
           ),
-          IconButton(
-            icon: Icon(Icons.message),
-            onPressed: () {},
-          ),
+          !isOwn
+              ? IconButton(
+                  icon: Icon(Icons.message),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MessageContainer(
+                          adId: adDetail['adId'],
+                          otherUid: adDetail['adUserId'],
+                          adDetail: adDetail,
+                        ),
+                      ),
+                    );
+                  },
+                )
+              : SizedBox.shrink(),
           SizedBox(
             width: kDefaultPadding / 2,
           ),

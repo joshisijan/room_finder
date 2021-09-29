@@ -4,9 +4,7 @@ import 'package:room_finder/src/providers/home_loading_provider.dart';
 import 'package:room_finder/src/screens/edit_profile.dart';
 import 'package:room_finder/src/screens/my_ads.dart';
 import 'package:room_finder/src/screens/photo_view.dart';
-import 'package:room_finder/src/screens/settings.dart';
 import 'package:room_finder/src/screens/signin.dart';
-import 'package:room_finder/src/screens/watchlist.dart';
 import 'package:provider/provider.dart';
 import 'package:room_finder/src/reuseables/circular_cache_image.dart';
 
@@ -70,14 +68,6 @@ class AccountTab extends StatelessWidget {
               }));
             },
             trailing: Icon(Icons.apps),
-          ),
-          ListTile(
-            title: Text('App Settings'),
-            onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => SettingPage()));
-            },
-            trailing: Icon(Icons.settings),
           ),
           ListTile(
             title: Text('log out'),

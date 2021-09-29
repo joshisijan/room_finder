@@ -25,11 +25,11 @@ ThemeData lightTheme = ThemeData(
 );
 
 ThemeData darkTheme = ThemeData(
-  brightness: Brightness.dark,
   backgroundColor: darkBG,
   primaryColor: darkPrimary,
   colorScheme: ThemeData.light().colorScheme.copyWith(
         secondary: lightAccent,
+        brightness: Brightness.dark,
       ),
   scaffoldBackgroundColor: darkBG,
   textSelectionTheme: TextSelectionThemeData(
