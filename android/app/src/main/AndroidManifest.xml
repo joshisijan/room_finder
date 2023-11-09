@@ -12,7 +12,7 @@
         android:label="room_finder"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBe9Y8WzLL2fc3HwxBVALVrmO79LtIeG34"/>
+            android:value="API_KEY_HERE"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
